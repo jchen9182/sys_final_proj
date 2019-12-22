@@ -1,5 +1,9 @@
 # File Explorer
 
+## Required libraries
+- GTK+ (for GUI work)
+  - ```sudo apt install gtk+3.0```
+
 ## Proposal
 Members:
   - Justin Chen (period 4)
@@ -46,9 +50,26 @@ Technical Design:
      - Don't even need to click the properties button, just clicking on a file should show basic info like file size on the bottom.
   
 Timeline:
-  - PLACEHOLDER
-  - PLACEHOLDER
-  - PLACEHOLDER
-  
-## Required libraries
-- GTK+ (for GUI work)
+  - [2019-12-28] Get a "Hello, World!" window showing with GTK+
+    - Worker(s) on this task: 
+    
+  - [2019-12-31] Generate an array of files via piping
+    - Worker(s) on this task: 
+    
+  - [2019-01-03] Parse individual files for their file extension
+    - Worker(s) on this task: 
+    
+  - [2020-01-06] Execute files accordingly using their file extension
+    - Worker(s) on this task: 
+    
+  - [2019-01-09] Get all the properties of a file
+    - Worker(s) on this task: 
+    
+  - [2019-01-12] File operations: create file, create directory, rename file, delete file, etc.
+    - Worker(s) on this task: 
+    
+  - [2019-01-15] {LAST BIG TASK}: convert all of the above into GUI form with GTK+
+    - Worker(s) on this task: 
+    
+  - [2019-01-16] Last work day; hand in project by tomorrow morning
+    - Worker(s) on this task: 
