@@ -1,0 +1,10 @@
+[2019-12-21] Kevin Li
+- Proposal
+  - Description of project
+  - User interface
+  - Technical design
+  
+[2019-12-22] Kevin Li
+- Proposal
+  - Timeline of project
+  - apt instructions for GTK+ on Ubuntu
