@@ -17,15 +17,21 @@ UI:
   - Click and drag to select multiple files at once
   
 Technical Design:
+  - Systems concepts used:
+    - Pipes
+    - Working with files
+    - Processes (fork, exec, etc.)
+    - Finding information about files (stat and such)
+
   - Show the current working directory in a box at the top or bottom of the window at all times: getcwd(), 200 size char array should be enough for 99% of cases
-  - Showing files in a directory
-    - Use a pipe to obtain what gets returned by running ls and feed it into a file stream: FILE * file = popen("ls", "r")
+  - Showing files in a directory [PIPING]
+    - Use a pipe to obtain what gets returned by running ls and feed it into a file stream: FILE * file = popen("ls", "r") [switch to using an unnamed pipe if we have time]
     - Read from the file stream and into a char array (should be rather big, maybe 10000 long?): fgets(array, sizeof(array), file)
     - Obtain every individual file: strsep(array, "\n")
     - For now, show files row by row; if we have time, we can add a "view" feature that can arrange the icons in other ways (currently don't know anything about GTK+ so will have to come back to update this later)
 
- - Working with files
-   - Open a file
+ - [WORKING WITH FILES]
+   - Run a file [FORK AND EXEC]
      - strsep(filename, ".") to obtain file extension (for now, just don't do anything if there is no file extension)
      - Use switch statement in c, use the appropriate program for the file extension
      - If a file extension is not recognized/coded into our program, it will be the default case, which is to not do anything.
@@ -36,7 +42,7 @@ Technical Design:
    - Create a directory: mkdir(char *dirname)
    - Rename a file: rename(char *oldname, char *newname)
    - Delete a file: remove(char *filename)
-   - View properties of a file: stat(char *filename, char* buffer)
+   - View properties of a file: stat(char *filename, char* buffer) [FINDING INFO ABOUT FILES]
      - Don't even need to click the properties button, just clicking on a file should show basic info like file size on the bottom.
   
 Timeline:
