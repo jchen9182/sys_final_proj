@@ -51,25 +51,24 @@ This project is a GUI-based file explorer. Examples would include File Explorer 
   
 **Timeline**
   - **[2019-12-28]** Get a "Hello, World!" window showing with GTK+
-    - Worker(s) on this task: 
+    - Worker(s) on this task: Justin Chen
     
   - **[2019-12-31]** Generate an array of files via piping
-    - Worker(s) on this task: 
+    - Worker(s) on this task: Kevin Li
     
   - **[2019-01-03]** Parse individual files for their file extension
-    - Worker(s) on this task: 
+    - Worker(s) on this task: Samuel Fang
     
   - **[2020-01-06]** Execute files accordingly using their file extension
-    - Worker(s) on this task: 
+    - Worker(s) on this task: Kevin Li
     
   - **[2019-01-09]** Get all the properties of a file
-    - Worker(s) on this task: 
+    - Worker(s) on this task: Samuel Fang
     
   - **[2019-01-12]** File operations: create file, create directory, rename file, delete file, etc.
-    - Worker(s) on this task: 
+    - Worker(s) on this task: Samuel Fang, Kevin Li
     
   - **[2019-01-15]** {LAST BIG TASK}: convert all of the above into GUI form with GTK+
-    - Worker(s) on this task: 
+    - Worker(s) on this task: Justin Chen (main), with assistance from Samuel & Kevin
     
   - [2019-01-16] Last work day; hand in project by tomorrow morning
-    - Worker(s) on this task: 
