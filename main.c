@@ -12,6 +12,7 @@ int main() {
     printf("%s \n", files[i]);
     printf(" >> extension: ");
     run_file(files[i]);
+    printf("\n");
   }
 
   return 0;
