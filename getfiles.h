@@ -1,1 +1,1 @@
-void getfiles(char *files);
+char ** getfiles(int *num_files);
