@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
-#include "getfiles.h"
+#include "fileinfo.h"
+#include "execute.h"
 
 int main() {
   int num_files = 0;
@@ -9,6 +10,8 @@ int main() {
   int i;
   for (i = 0; i < num_files; i++) {
     printf("%s \n", files[i]);
+    printf(" >> extension: ");
+    run_file(files[i]);
   }
 
   return 0;
