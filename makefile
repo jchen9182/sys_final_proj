@@ -1,10 +1,10 @@
-all: getfiles.o main.o
-	gcc -o fileexp getfiles.o main.o
+all: fileinfo.o main.o
+	gcc -o fileexp fileinfo.o main.o
 
-getfiles.o: getfiles.c getfiles.h
-	gcc -c getfiles.c
+fileinfo.o: fileinfo.c fileinfo.h
+	gcc -c fileinfo.c
 
-main.o: main.c getfiles.h
+main.o: main.c fileinfo.h
 	gcc -c main.c
 
 run:
