@@ -1,7 +1,7 @@
 all: fileinfo.o execute.o main.o
 	gcc -o fileexp fileinfo.o execute.o main.o
 
-fileinfo.o: fileinfo.c fileinfo.h
+fileinfo.o: fileinfo.c fileinfo.h structs.c
 	gcc -c fileinfo.c
 
 execute.o: execute.c execute.h fileinfo.h
