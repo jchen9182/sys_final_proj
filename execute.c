@@ -15,6 +15,7 @@ void run_file(char *file) { //for double clicking a file; this function doesn't 
     pid_t pid = fork();
     if (pid == 0) { //is the child
       execlp("gedit", "gedit", file, NULL);
+      //tried using a system call of "xdg-open" to open default applications, ended in a fork bomb lol
     }
 
     return;

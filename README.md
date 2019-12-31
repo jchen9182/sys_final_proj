@@ -35,9 +35,9 @@ This project is a GUI-based file explorer. Examples would include File Explorer 
 
  - [WORKING WITH FILES]
    - Run a file [FORK AND EXEC]
-     - strsep(filename, ".") to obtain file extension (for now, just don't do anything if there is no file extension)
-     - Use switch statement in c, use the appropriate program for the file extension
-     - If a file extension is not recognized/coded into our program, it will be the default case, which is to not do anything.
+     - Loop from right to left to obtain file extension (for now, just don't do anything if there is no file extension)
+     - Use a bunch of if statements to check file extension using strcmp(), use the appropriate program for the file extension
+     - If a file extension is not recognized/coded into our program, it will be the default case, which is to not do anything and print an "unknown file type" error.
        - e.g. for .txt and other raw text files: execute gedit with the text file (don't know how to obtain the default program yet, and we know that gedit is present on every single Ubuntu machine)
        - e.g. for .jpg, .png, other image files: execute eog with the image file
 

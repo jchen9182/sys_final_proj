@@ -3,8 +3,16 @@
   - Description of project
   - User interface
   - Technical design
-  
+
 [2019-12-22] Kevin Li
 - Proposal
   - Timeline of project
   - apt instructions for GTK+ on Ubuntu
+
+[2019-12-30] Kevin Li
+- Get every file in the current working directory (in this case, the repo folder) into a string array
+- Fix proposal to switch to using opendir() and readdir() rather than popen() with ls
+- Obtain the file extension of a file
+- Run files with the appropriate program given an extension
+- Put necessary data like the permissions and the size in bytes into a struct that can be easily accessed
+- Note: do not use the system() call after forking a child - for some reason it causes a fork bomb
