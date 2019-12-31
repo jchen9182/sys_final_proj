@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include "fileinfo.h"
 #include "execute.h"
+#include "fileops.h"
 
 int main() {
   int num_files = 0;
@@ -12,7 +13,7 @@ int main() {
   for (i = 0; i < num_files; i++) {
     printf("[%s] \n", files[i]);
     printf("Extension: ");
-    run_file(files[i]);
+    run_file(files[i]); //opens every file in this repo, comment this out if don't want
     struct fileprops prop;
     get_props(files[i], &prop);
     printf("Size: %d bytes \n", prop.size_bytes);
@@ -25,6 +26,14 @@ int main() {
 
     printf("\n");
   }
+
+  /*
+  new_file();
+  new_folder();
+  rename_thing("New Folder", "xdddddd");
+  rename_thing("Untitled Document", "test test");
+  remove_thing("Untitled Document 2");
+  */
 
   return 0;
 }

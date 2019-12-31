@@ -8,6 +8,7 @@
 
 void new_file() {
   int fd = open("Untitled Document", O_CREAT | O_EXCL, 0666);
+  printf("fd: %d \n", fd);
 
   if (fd < 0)
     fd = open("Untitled Document 2", O_CREAT, 0666);
