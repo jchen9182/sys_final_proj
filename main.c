@@ -10,14 +10,19 @@ int main() {
 
   int i;
   for (i = 0; i < num_files; i++) {
-    printf("%s \n", files[i]);
-    printf(" >> extension: ");
+    printf("[%s] \n", files[i]);
+    printf("Extension: ");
     run_file(files[i]);
     struct fileprops prop;
     get_props(files[i], &prop);
-    printf("\n");
-    printf("%d bytes \n", prop.size_bytes);
-    printf("%s \n", prop.perms);
+    printf("Size: %d bytes \n", prop.size_bytes);
+    printf("Permissions: %s \n", prop.perms);
+
+    if (prop.isdir == 0)
+      printf("This is a file. \n");
+    else
+      printf("This is a directory. \n");
+
     printf("\n");
   }
 

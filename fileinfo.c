@@ -58,4 +58,6 @@ void get_props(char *filename, struct fileprops * props) {
   props -> perms[9] = '\0'; //for some reason there's extra bytes to the right of the S_IXOTH byte even though the string is 9 large, whatever this fixes it
 
   props -> size_bytes = metadata.st_size;
+
+  props -> isdir = (S_ISDIR(metadata.st_mode)) ? 1 : 0;
 }
