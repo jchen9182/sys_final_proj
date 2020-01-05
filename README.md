@@ -2,7 +2,7 @@
 
 ## Required libraries
 - GTK+ (for GUI work)
-  - ```sudo apt install gtk+3.0```
+  - ```sudo apt install libgtk-3-dev```
 
 ## Proposal
 **Members**
