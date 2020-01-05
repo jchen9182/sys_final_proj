@@ -4,36 +4,28 @@
 #include "fileinfo.h"
 #include "execute.h"
 #include "fileops.h"
+#include <gtk/gtk.h>
 
-int main() {
-  int num_files = 0;
-  char ** files = getfiles(&num_files);
+static void on_button_clicked(GtkButton *btn, gpointer data) {
+  gtk_button_set_label(btn, "You clicked me!");
+}
 
-  int i;
-  for (i = 0; i < num_files; i++) {
-    printf("[%s] \n", files[i]);
-    printf("Extension: ");
-    run_file(files[i]); //opens every file in this repo, comment this out if don't want
-    struct fileprops prop;
-    get_props(files[i], &prop);
-    printf("Size: %d bytes \n", prop.size_bytes);
-    printf("Permissions: %s \n", prop.perms);
+static void on_app_activate(GApplication *app, gpointer data) {
+  GtkWidget *window = gtk_application_window_new(GTK_APPLICATION(app));
+  GtkWidget *btn = gtk_button_new_with_label("Hello World!");
+  g_signal_connect(btn, "clicked", G_CALLBACK(on_button_clicked), NULL);
+  gtk_container_add(GTK_CONTAINER(window), btn);
+  gtk_widget_show_all(GTK_WIDGET(window));
+}
 
-    if (prop.isdir == 0)
-      printf("This is a file. \n");
-    else
-      printf("This is a directory. \n");
+int main(int argc, char *argv[]) {
+  GtkApplication *app = gtk_application_new(
+    "org.mks65.fileexp",
+    G_APPLICATION_FLAGS_NONE
+  );
 
-    printf("\n");
-  }
-
-  /*
-  new_file();
-  new_folder();
-  rename_thing("New Folder", "xdddddd");
-  rename_thing("Untitled Document", "test test");
-  remove_thing("Untitled Document 2");
-  */
-
-  return 0;
+  g_signal_connect(app, "activate", G_CALLBACK(on_app_activate), NULL);
+  int status = g_application_run(G_APPLICATION(app), argc,argv);
+  g_object_unref(app);
+  return status;
 }
