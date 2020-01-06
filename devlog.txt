@@ -21,3 +21,7 @@
 - Comments on whatever has been done so far
 - Add to file properties struct whether or not smth in a directory is a file or folder
 - Basic file operations: create untitled document, create new folder, rename stuff, delete stuff
+
+[2020-01-05] Kevin Li
+- Basic GTK+ stuff
+- Experimenting with showing stuff on screen
