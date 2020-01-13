@@ -21,3 +21,7 @@
 - Comments on whatever has been done so far
 - Add to file properties struct whether or not smth in a directory is a file or folder
 - Basic file operations: create untitled document, create new folder, rename stuff, delete stuff
+
+[2020-1-13] Samuel Fang
+- Comment on cd operation
+- Basic cd operations: enter directory, double click, back
