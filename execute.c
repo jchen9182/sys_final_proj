@@ -2,6 +2,7 @@
 #include <string.h>
 #include <unistd.h>
 #include "fileinfo.h"
+#include <errno.h>
 
 #define MAX_FILE_LEN 50
 
@@ -34,7 +35,7 @@ void run_file(char *file) { //for double clicking a file; this function doesn't 
     printf("Unrecognized file extension. \n");
 }
 
-void back() {
+void back() { //not sure if we are doing forward
   if (chdir("..") < 0) {
     printf("chdir() error: %s\n",strerror(errno));
   }
@@ -46,7 +47,7 @@ void enter_directory(char *directory) {
   }
 }
 
-void double_click(char *file_name) {
+void double_click(char *file_name) { //works for files and directories
   struct fileprops prop;
   get_props(file_name, &prop);
   if (prop.isdir == 0)
