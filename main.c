@@ -15,6 +15,8 @@ static void activate(GtkApplication *app, gpointer data) {
   gtk_window_set_default_size(GTK_WINDOW(window), 900, 650);
 
   grid = gtk_grid_new();
+  gtk_grid_set_row_spacing(GTK_GRID(grid), 5);
+  gtk_grid_set_column_spacing(GTK_GRID(grid), 30);
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(grid));
 
   int num_files = 0;
@@ -23,12 +25,13 @@ static void activate(GtkApplication *app, gpointer data) {
   int i;
   int row, col = 0;
   for (i = 0; i < num_files; i++) {
-    GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
     GtkWidget *iconbutton = gtk_button_new();
-    GtkWidget *iconimg = gtk_image_new_from_file("finderico.png");
+    GtkWidget *iconimg = gtk_image_new_from_file("fileicon.png");
     gtk_button_set_always_show_image(GTK_BUTTON(iconbutton), TRUE);
     gtk_button_set_image(GTK_BUTTON(iconbutton), iconimg);
     GtkWidget *filename = gtk_label_new(files[i]);
+    //gtk_label_set_max_width_chars(GTK_LABEL(filename), 0); doesn't work
     gtk_box_pack_start(GTK_BOX(box), iconbutton, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(box), filename, FALSE, FALSE, 0);
     gtk_grid_attach(GTK_GRID(grid), box, col, row, 1, 1);
