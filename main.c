@@ -8,11 +8,20 @@
 
 static void activate(GtkApplication *app, gpointer data) {
   GtkWidget *window;
+  GtkWidget *titlebar;
   GtkWidget *grid;
+  char cwd[100];
+  getcwd(cwd, 100);
+  GtkWidget *cwdlabel = gtk_label_new(cwd);
 
   window = gtk_application_window_new(app);
-  gtk_window_set_title(GTK_WINDOW(window), "File Explorer");
   gtk_window_set_default_size(GTK_WINDOW(window), 900, 650);
+  gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
+
+  titlebar = gtk_header_bar_new();
+  gtk_header_bar_set_show_close_button(GTK_HEADER_BAR(titlebar), TRUE);
+  gtk_header_bar_pack_start(GTK_HEADER_BAR(titlebar), cwdlabel);
+  gtk_window_set_titlebar(GTK_WINDOW(window), titlebar);
 
   grid = gtk_grid_new();
   gtk_grid_set_row_spacing(GTK_GRID(grid), 5);
@@ -28,6 +37,7 @@ static void activate(GtkApplication *app, gpointer data) {
     GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
     GtkWidget *iconbutton = gtk_button_new();
     GtkWidget *iconimg = gtk_image_new_from_file("fileicon.png");
+
     gtk_button_set_always_show_image(GTK_BUTTON(iconbutton), TRUE);
     gtk_button_set_image(GTK_BUTTON(iconbutton), iconimg);
     GtkWidget *filename = gtk_label_new(files[i]);
@@ -37,7 +47,7 @@ static void activate(GtkApplication *app, gpointer data) {
     gtk_grid_attach(GTK_GRID(grid), box, col, row, 1, 1);
 
     col++;
-    if (col >= 10) {
+    if (col == 7) {
       row++;
       col = 0;
     }

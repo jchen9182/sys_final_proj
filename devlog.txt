@@ -34,3 +34,4 @@
 - makefile for easy running of the program
 - Grid layout established for all files in the folder
   - Still need to limit the size of labels somehow
+- Show cwd in the title bar
