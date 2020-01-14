@@ -22,6 +22,15 @@
 - Add to file properties struct whether or not smth in a directory is a file or folder
 - Basic file operations: create untitled document, create new folder, rename stuff, delete stuff
 
-[2020-1-13] Samuel Fang
+[2020-01-05] Kevin Li
+- Basic GTK+ stuff
+- Experimenting with showing stuff on screen
+
+[2020-01-13] Samuel Fang
 - Comment on cd operation
 - Basic cd operations: enter directory, double click, back
+
+[2020-01-13] Kevin Li
+- makefile for easy running of the program
+- Grid layout established for all files in the folder
+  - Still need to limit the size of labels somehow

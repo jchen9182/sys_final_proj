@@ -1,22 +1,12 @@
-all: fileinfo.o execute.o fileops.o main.o
-	gcc -o fileexp fileinfo.o execute.o fileops.o main.o
+all: main
 
-fileinfo.o: fileinfo.c fileinfo.h structs.c
-	gcc -c fileinfo.c
-
-execute.o: execute.c execute.h fileinfo.h
-	gcc -c execute.c
-
-fileops.o: fileops.c fileops.h
-	gcc -c fileops.c
-
-main.o: main.c fileinfo.h execute.h
-	gcc -c main.c
+main: main.c fileinfo.h execute.h
+	gcc `pkg-config --cflags gtk+-3.0` -o fileexp main.c fileinfo.c `pkg-config --libs gtk+-3.0`
 
 run:
 	./fileexp
 
 clean:
-	rm *.o
+	#rm *.o
 	rm fileexp
 	rm *.gch
