@@ -67,13 +67,14 @@ static void activate(GtkApplication *app, gpointer data) {
 
   int num_files = 0;
   char ** files = getfiles(&num_files);
-  //GtkWidget *icon = gtk_image_new_from_file("finderico.png");
   int i;
   int row, col = 0;
   for (i = 0; i < num_files; i++) {
     struct data * d = malloc(sizeof(struct data));
     strncpy(d -> filename, files[i], MAX_FILE_LEN);
+    printf("%s \n", files[i]);
 
+    /*
     GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
     GtkWidget *iconbutton = gtk_button_new();
     GtkWidget *iconimg = gtk_image_new_from_file("fileicon.png");
@@ -83,8 +84,9 @@ static void activate(GtkApplication *app, gpointer data) {
 
     GtkWidget *filename = gtk_label_new(files[i]);
     gtk_box_pack_start(GTK_BOX(box), iconbutton, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(box), filename, FALSE, FALSE, 0);
+    //gtk_box_pack_start(GTK_BOX(box), filename, FALSE, FALSE, 0);
     gtk_grid_attach(GTK_GRID(grid), box, col, row, 1, 1);
+    */
 
     col++;
     if (col == 7) {
