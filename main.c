@@ -6,6 +6,22 @@
 #include "fileops.h"
 #include <gtk/gtk.h>
 
+void btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
+  if (event -> type == GDK_BUTTON_PRESS && event -> button == 3) { //right mouse button
+    GtkWidget *runfile = gtk_menu_item_new_with_label("Open");
+    GtkWidget *delete = gtk_menu_item_new_with_label("Delete");
+    GtkWidget *rename = gtk_menu_item_new_with_label("Rename...");
+
+    GtkWidget *menu = gtk_menu_new();
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), runfile);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), delete);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), rename);
+
+    gtk_widget_show_all(menu);
+    gtk_menu_popup_at_widget(GTK_MENU(menu), btn, 0, 0, NULL);
+  }
+}
+
 static void activate(GtkApplication *app, gpointer data) {
   GtkWidget *window;
   GtkWidget *titlebar;
@@ -40,6 +56,7 @@ static void activate(GtkApplication *app, gpointer data) {
 
     gtk_button_set_always_show_image(GTK_BUTTON(iconbutton), TRUE);
     gtk_button_set_image(GTK_BUTTON(iconbutton), iconimg);
+    g_signal_connect(iconbutton, "button-press-event", G_CALLBACK(btn_press), NULL);
     GtkWidget *filename = gtk_label_new(files[i]);
     //gtk_label_set_max_width_chars(GTK_LABEL(filename), 0); doesn't work
     gtk_box_pack_start(GTK_BOX(box), iconbutton, FALSE, FALSE, 0);
