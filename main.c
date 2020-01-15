@@ -13,19 +13,17 @@ struct data {
   char filename[50];
 };
 
-void executefile(gchar *file) {
-  printf("%s \n", file);
-  run_file(file);
+void executefile(GtkWidget *menuitem, gpointer userdata) {
+  struct data *d = (struct data *)userdata;
+  char *filename = d -> filename;
+  printf("%s \n", filename);
+  run_file(filename);
 }
 
-gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer *userdata) {
+gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
   if (event -> type == GDK_BUTTON_PRESS && event -> button == 3) { //right mouse button
-    struct data *d = (struct data *)userdata;
-    char *filename = d -> filename;
-    free(userdata);
-
     GtkWidget *runfile = gtk_menu_item_new_with_label("Open");
-    g_signal_connect(runfile, "activate", G_CALLBACK(executefile), filename);
+    g_signal_connect(runfile, "activate", G_CALLBACK(executefile), userdata);
 
     GtkWidget *delete = gtk_menu_item_new_with_label("Delete");
     GtkWidget *rename = gtk_menu_item_new_with_label("Rename...");
