@@ -74,7 +74,6 @@ static void activate(GtkApplication *app, gpointer data) {
     strncpy(d -> filename, files[i], MAX_FILE_LEN);
     printf("%s \n", files[i]);
 
-    /*
     GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
     GtkWidget *iconbutton = gtk_button_new();
     GtkWidget *iconimg = gtk_image_new_from_file("fileicon.png");
@@ -82,11 +81,21 @@ static void activate(GtkApplication *app, gpointer data) {
     gtk_button_set_image(GTK_BUTTON(iconbutton), iconimg);
     g_signal_connect(iconbutton, "button_press_event", G_CALLBACK(btn_press), d);
 
-    GtkWidget *filename = gtk_label_new(files[i]);
+    //Truncate file names that are too long
+    char buf[35];
+    if (strlen(files[i]) > 25) {
+      strncpy(buf, files[i], 24);
+      strncat(buf, "...", 4);
+    } else {
+      strncpy(buf, files[i], 25);
+    }
+
+    GtkWidget *filename = gtk_label_new(buf);
+    gtk_label_set_line_wrap(GTK_LABEL(filename), TRUE);
+    gtk_label_set_max_width_chars(GTK_LABEL(filename), 1);
     gtk_box_pack_start(GTK_BOX(box), iconbutton, FALSE, FALSE, 0);
-    //gtk_box_pack_start(GTK_BOX(box), filename, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(box), filename, FALSE, FALSE, 0);
     gtk_grid_attach(GTK_GRID(grid), box, col, row, 1, 1);
-    */
 
     col++;
     if (col == 7) {
