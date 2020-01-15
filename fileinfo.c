@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
 #include <dirent.h>
 #include <sys/types.h>
@@ -37,47 +38,10 @@ void get_ext(char *filename, char *buff) {
 
     i--;
   }
+
+	strcpy(buff, "\0"); //period not found; make the extension a null-ended string which gets returned
+}
   
-  char * get_properties(char *file_name) {
-    char * properties;
-    properties = malloc(sizeof(char) * 500);
-    struct fileprops prop;
-    char * size;
-    size = malloc(sizeof(char) * 100);
-    get_props(file_name, &prop);
-    strcat(properties, "File Name: ");
-    strcat(properties, file_name);
-    strcat(properties, "\n");
-    strcat(properties, "Size: ");
-    sprintf(size, "%d", prop.size_bytes);
-    strcat(properties, size);
-    strcat(properties, " bytes \n");
-    strcat(properties, "Permissions: ");
-    strcat(properties, prop.perms);
-    strcat(properties, "\n");
-    if (prop.isdir == 0) {
-        strcat(properties, "Type: file \nExtension: ");
-        char ext[10];
-        get_ext(file_name, ext);
-        strcat(properties, ext);
-        strcat(properties, "\n");
-    }
-    else
-    strcat(properties, "Type: directory \n");
-    return properties;
-}
-
-char * get_dir() {
-    char * wd;
-    wd = malloc(sizeof(char) * 100);
-    getcwd(wd, 100);
-    return wd;
-}
-
-
-  strcpy(buff, "\0"); //period not found; make the extension a null-ended string which gets returned
-}
-
 void get_props(char *filename, struct fileprops * props) {
   struct stat metadata;
   stat(filename, &metadata);
@@ -97,4 +61,37 @@ void get_props(char *filename, struct fileprops * props) {
   props -> size_bytes = metadata.st_size;
 
   props -> isdir = (S_ISDIR(metadata.st_mode)) ? 1 : 0;
+}
+
+char * get_properties(char *file_name) {
+  char * properties = malloc(sizeof(char) * 500);
+  struct fileprops prop;
+  char * size = malloc(sizeof(char) * 100);
+  get_props(file_name, &prop);
+  strcat(properties, "File Name: ");
+  strcat(properties, file_name);
+  strcat(properties, "\n");
+  strcat(properties, "Size: ");
+  sprintf(size, "%d", prop.size_bytes);
+  strcat(properties, size);
+  strcat(properties, " bytes \n");
+  strcat(properties, "Permissions: ");
+  strcat(properties, prop.perms);
+  strcat(properties, "\n");
+  if (prop.isdir == 0) {
+    strcat(properties, "Type: file \nExtension: ");
+    char ext[10];     
+	  get_ext(file_name, ext);
+    strcat(properties, ext);
+    strcat(properties, "\n");
+  } else
+    strcat(properties, "Type: directory \n");
+    return properties;
+}
+
+char * get_dir() {
+  char * wd;
+  wd = malloc(sizeof(char) * 100);
+  getcwd(wd, 100);
+  return wd;
 }
