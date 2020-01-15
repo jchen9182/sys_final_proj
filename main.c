@@ -11,21 +11,33 @@
 
 struct data {
   char filename[50];
+  GtkWidget *btn;
 };
 
 void executefile(GtkWidget *menuitem, gpointer userdata) {
   struct data *d = (struct data *)userdata;
   char *filename = d -> filename;
-  printf("%s \n", filename);
   run_file(filename);
+}
+
+void deletefile(GtkWidget *menuitem, gpointer userdata) {
+  struct data *d = (struct data *)userdata;
+  char *filename = d -> filename;
+  remove_thing(filename);
+  gtk_widget_destroy(d -> btn);
 }
 
 gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
   if (event -> type == GDK_BUTTON_PRESS && event -> button == 3) { //right mouse button
+    struct data *d = (struct data *)userdata;
+    d -> btn = btn;
+
     GtkWidget *runfile = gtk_menu_item_new_with_label("Open");
     g_signal_connect(runfile, "activate", G_CALLBACK(executefile), userdata);
 
     GtkWidget *delete = gtk_menu_item_new_with_label("Delete");
+    g_signal_connect(delete, "activate", G_CALLBACK(deletefile), userdata);
+
     GtkWidget *rename = gtk_menu_item_new_with_label("Rename...");
 
     GtkWidget *menu = gtk_menu_new();
