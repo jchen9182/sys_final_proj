@@ -41,3 +41,6 @@
   - Open file (working)
   - Remove file (not yet implemented)
   - Rename file (not yet implemented)
+
+[2020-01-15] Samuel Fang and Justin Chen
+- Fixed get properties and addded get directory
