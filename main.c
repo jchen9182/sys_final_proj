@@ -45,8 +45,6 @@ gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), delete);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), rename);
 
-    //g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
-
     gtk_widget_show_all(menu);
     gtk_menu_popup_at_widget(GTK_MENU(menu), btn, 0, 0, NULL);
     return TRUE;
@@ -56,6 +54,9 @@ gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
 }
 
 static void activate(GtkApplication *app, gpointer data) {
+  int num_files = 0;
+  char ** files = getfiles(&num_files);
+
   GtkWidget *window;
   GtkWidget *titlebar;
   GtkWidget *grid;
@@ -77,14 +78,12 @@ static void activate(GtkApplication *app, gpointer data) {
   gtk_grid_set_column_spacing(GTK_GRID(grid), 30);
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(grid));
 
-  int num_files = 0;
-  char ** files = getfiles(&num_files);
   int i;
   int row, col = 0;
   for (i = 0; i < num_files; i++) {
+    printf("%s \n", files[i]);
     struct data * d = malloc(sizeof(struct data));
     strncpy(d -> filename, files[i], MAX_FILE_LEN);
-    printf("%s \n", files[i]);
 
     //Truncate file names that are too long
     char buf[35];
