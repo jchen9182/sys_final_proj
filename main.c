@@ -28,6 +28,23 @@ void deletefile(GtkWidget *menuitem, gpointer userdata) {
   gtk_widget_destroy(d -> btn);
 }
 
+void entry_callback(GtkEntry *entry, gpointer userdata) {
+  printf("aaaaaaaa");
+}
+
+void renamefile(GtkWidget *menuitem, gpointer userdata) {
+  struct data *d = (struct data *)userdata;
+  char *filename = d -> filename;
+
+  GtkWidget *popover = gtk_popover_new(d -> btn);
+  gtk_popover_popup(GTK_POPOVER(popover));
+  gtk_popover_set_position(GTK_POPOVER(popover), GTK_POS_BOTTOM);
+  GtkWidget *entry = gtk_entry_new();
+  gtk_entry_set_max_length(GTK_ENTRY(entry), MAX_FILE_LEN);
+
+  g_signal_connect(entry, "activate", G_CALLBACK(entry_callback), userdata);
+}
+
 gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
   if (event -> type == GDK_BUTTON_PRESS && event -> button == 3) { //right mouse button
     struct data *d = (struct data *)userdata;
@@ -40,6 +57,7 @@ gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
     g_signal_connect(delete, "activate", G_CALLBACK(deletefile), userdata);
 
     GtkWidget *rename = gtk_menu_item_new_with_label("Rename...");
+    g_signal_connect(rename, "activate", G_CALLBACK(renamefile), userdata);
 
     GtkWidget *menu = gtk_menu_new();
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), runfile);
