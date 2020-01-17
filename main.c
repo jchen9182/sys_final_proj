@@ -12,6 +12,7 @@
 struct data {
   char filename[50];
   GtkWidget *btn;
+  int isDir;
 };
 
 void executefile(GtkWidget *menuitem, gpointer userdata) {
@@ -48,6 +49,11 @@ gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
     gtk_widget_show_all(menu);
     gtk_menu_popup_at_widget(GTK_MENU(menu), btn, 0, 0, NULL);
     return TRUE;
+  }
+
+  else if (event -> type == GDK_2BUTTON_PRESS && event -> button == 1) { //double click
+    struct data *d = (struct data *)userdata;
+    run_file(d -> filename);
   }
 
   return FALSE;

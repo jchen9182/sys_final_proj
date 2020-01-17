@@ -43,4 +43,14 @@
   - Rename file (not yet implemented)
 
 [2020-01-15] Samuel Fang and Justin Chen
-- Fixed get properties and addded get directory
+- Fixed get properties and added get directory
+
+[2020-01-15] Kevin Li
+- Truncate file names if too long
+- Delete file (after right clicking a file) [GRID DOES NOT SHIFT LEFT]
+  - Also get rid of the label beneath
+- There is some weird GTK related bug that I can't seem to diagnose the cause of. All I know is that it happens on the school computers and not on my own PC.
+
+[2020-01-16] Kevin Li
+- Fixed the GTK issue by setting the MIN_VERSION flag or whatever to a newer version when compiling
+- Double click a file to open a file
