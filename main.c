@@ -28,10 +28,6 @@ void deletefile(GtkWidget *menuitem, gpointer userdata) {
   gtk_widget_destroy(d -> btn);
 }
 
-void entry_callback(GtkEntry *entry, gpointer userdata) {
-  printf("aaaaaaaa");
-}
-
 void renamefile(GtkWidget *menuitem, gpointer userdata) {
   struct data *d = (struct data *)userdata;
   char *filename = d -> filename;

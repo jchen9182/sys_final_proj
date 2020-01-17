@@ -41,7 +41,7 @@ void get_ext(char *filename, char *buff) {
 
 	strcpy(buff, "\0"); //period not found; make the extension a null-ended string which gets returned
 }
-  
+
 void get_props(char *filename, struct fileprops * props) {
   struct stat metadata;
   stat(filename, &metadata);
@@ -80,7 +80,7 @@ char * get_properties(char *file_name) {
   strcat(properties, "\n");
   if (prop.isdir == 0) {
     strcat(properties, "Type: file \nExtension: ");
-    char ext[10];     
+    char ext[10];
 	  get_ext(file_name, ext);
     strcat(properties, ext);
     strcat(properties, "\n");
