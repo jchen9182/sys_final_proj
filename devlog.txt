@@ -54,3 +54,6 @@
 [2020-01-16] Kevin Li
 - Fixed the GTK issue by setting the MIN_VERSION flag or whatever to a newer version when compiling
 - Double click a file to open a file
+
+[2020-01-17] Samuel Fang
+- Fixed README.md
