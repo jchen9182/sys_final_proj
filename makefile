@@ -1,7 +1,7 @@
 all: main
 
-main: main.c fileinfo.h execute.h fileops.h
-	gcc `pkg-config --cflags gtk+-3.0` -o fileexp main.c fileinfo.c execute.c fileops.c `pkg-config --libs gtk+-3.0`
+main: main.c fileinfo.h execute.h fileops.h structs.c
+	gcc `pkg-config --cflags gtk+-3.0` -o fileexp main.c structs.c fileinfo.c execute.c fileops.c `pkg-config --libs gtk+-3.0`
 
 run:
 	./fileexp

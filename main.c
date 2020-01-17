@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <gtk/gtk.h>
 #include "fileinfo.h"
 #include "execute.h"
 #include "fileops.h"
-#include <gtk/gtk.h>
 
 #define MAX_FILE_LEN 50
 
@@ -18,7 +18,11 @@ struct data {
 void executefile(GtkWidget *menuitem, gpointer userdata) {
   struct data *d = (struct data *)userdata;
   char *filename = d -> filename;
-  run_file(filename);
+
+  if (d -> isDir == 0)
+    run_file(d -> filename);
+  else
+    printf("Opening folder \n");
 }
 
 void deletefile(GtkWidget *menuitem, gpointer userdata) {
@@ -67,7 +71,10 @@ gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
 
   else if (event -> type == GDK_2BUTTON_PRESS && event -> button == 1) { //double click
     struct data *d = (struct data *)userdata;
-    run_file(d -> filename);
+    if (d -> isDir == 0)
+      run_file(d -> filename);
+    else
+      printf("Opening folder \n");
   }
 
   return FALSE;
@@ -105,6 +112,9 @@ static void activate(GtkApplication *app, gpointer data) {
     struct data * d = malloc(sizeof(struct data));
     strncpy(d -> filename, files[i], MAX_FILE_LEN);
 
+    struct fileprops metadata;
+    get_props(files[i], &metadata);
+
     //Truncate file names that are too long
     char buf[35];
     if (strlen(files[i]) > 25) {
@@ -116,8 +126,16 @@ static void activate(GtkApplication *app, gpointer data) {
 
     GtkWidget *iconbutton = gtk_button_new();
     GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
-    GtkWidget *iconimg = gtk_image_new_from_file("fileicon.png");
-    gtk_box_pack_start(GTK_BOX(box), iconimg, FALSE, FALSE, 0);
+
+    if (metadata.isdir == 0) {
+      GtkWidget *iconimg = gtk_image_new_from_file("fileicon.png");
+      gtk_box_pack_start(GTK_BOX(box), iconimg, FALSE, FALSE, 0);
+      d -> isDir = 0;
+    } else {
+      GtkWidget *folderimg = gtk_image_new_from_file("foldericon.png");
+      gtk_box_pack_start(GTK_BOX(box), folderimg, FALSE, FALSE, 0);
+      d -> isDir = 1;
+    }
 
     GtkWidget *filename = gtk_label_new(buf);
     gtk_label_set_line_wrap(GTK_LABEL(filename), TRUE);
