@@ -1,9 +1,5 @@
 # File Explorer
 
-## Required libraries
-- GTK+ (for GUI work)
-- ```sudo apt install libgtk-3-dev```
-
 **Members**
 - Justin Chen (period 4)
 - Samuel Fang (period 4)
@@ -18,9 +14,17 @@ This project is a GUI-based file explorer. Examples would include File Explorer 
 - Double click to execute a file with the appropriate program for the file extension (further explained in the technical design section)
 - Secondary mouse click to bring up additional actions (such as to delete, rename, or view the properties of a file)
 - Click and drag to select multiple files at once
+- Back button to exit current directory
+- View current directory on the top
+
+## Required libraries
+- GTK+ (for GUI work)
+- ```sudo apt install libgtk-3-dev```
 
 **Instructions**
-- STUFF
+- go to sys_final_proj directory
+- make
+- make run
 
 **Known Bugs**
 - None yet
