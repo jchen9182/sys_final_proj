@@ -47,7 +47,7 @@ gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), rename);
 
     gtk_widget_show_all(menu);
-    gtk_menu_popup_at_widget(GTK_MENU(menu), btn, 0, 0, NULL);
+    gtk_menu_popup_at_pointer(GTK_MENU(menu), NULL);
     return TRUE;
   }
 
