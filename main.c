@@ -38,7 +38,7 @@ void renamefile(GtkWidget *menuitem, gpointer userdata) {
   GtkWidget *entry = gtk_entry_new();
   gtk_entry_set_max_length(GTK_ENTRY(entry), MAX_FILE_LEN);
 
-  g_signal_connect(entry, "activate", G_CALLBACK(entry_callback), userdata);
+  //g_signal_connect(entry, "activate", G_CALLBACK(entry_callback), userdata);
 }
 
 gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
