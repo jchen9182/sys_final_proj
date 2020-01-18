@@ -64,3 +64,8 @@
   - Previously, I just malloc-ed 100 * MAX_FILE_LEN once at the beginning of the function.
   - This probably meant that the memory the strings initially took up wasn't protected and was "taken over" by an abundance of GTK widgets.
   - Won't know if this issue is 100% fixed until I can test this on the school computers.
+
+[2019-01-18] Kevin Li
+- Homogeneous spacing for the grid
+- Popover done
+  - Bolding for the text in the popover

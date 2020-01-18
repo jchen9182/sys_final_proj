@@ -130,7 +130,9 @@ static void activate(GtkApplication *app, gpointer data) {
 
   grid = gtk_grid_new();
   gtk_grid_set_row_spacing(GTK_GRID(grid), 5);
-  gtk_grid_set_column_spacing(GTK_GRID(grid), 30);
+  gtk_grid_set_column_spacing(GTK_GRID(grid), 50);
+  gtk_grid_set_column_homogeneous(GTK_GRID(grid), TRUE);
+  gtk_container_set_border_width(GTK_CONTAINER(grid), 20);
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(grid));
 
   int i;
@@ -167,8 +169,10 @@ static void activate(GtkApplication *app, gpointer data) {
     }
 
     GtkWidget *filename = gtk_label_new(buf);
+    gtk_label_set_justify(GTK_LABEL(filename), GTK_JUSTIFY_CENTER);
     gtk_label_set_line_wrap(GTK_LABEL(filename), TRUE);
     gtk_label_set_max_width_chars(GTK_LABEL(filename), 1);
+    gtk_label_set_lines(GTK_LABEL(filename), 3);
     gtk_box_pack_start(GTK_BOX(box), filename, FALSE, FALSE, 0);
 
     g_signal_connect(iconbutton, "button_press_event", G_CALLBACK(btn_press), d);
@@ -176,7 +180,7 @@ static void activate(GtkApplication *app, gpointer data) {
     gtk_grid_attach(GTK_GRID(grid), iconbutton, col, row, 1, 1);
 
     col++;
-    if (col == 7) {
+    if (col == 6) {
       row++;
       col = 0;
     }
