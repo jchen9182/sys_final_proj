@@ -141,9 +141,27 @@ void view_props(GtkWidget *menuitem, gpointer userdata) {
     d -> called_from_popover = 0;
     g_signal_connect(entry, "activate", G_CALLBACK(entry_callback), userdata);
 
+    char buf[30];
+    if (metadata.size_bytes < 1024) {
+      sprintf(buf, "%d", metadata.size_bytes);
+      strncat(buf, " bytes", 7);
+    } else {
+      strncpy(buf, metadata.size, 10);
+      strncat(buf, " (", 3);
+      char buf2[20]; //lmk when you're browsing files greater than 19 digits of bytes in size
+      sprintf(buf2, "%d", metadata.size_bytes);
+      strncat(buf, buf2, 20);
+      strncat(buf, " bytes", 7);
+      strncat(buf, ")", 2);
+    }
+
+    GtkWidget *sizelabel2 = gtk_label_new(buf);
+    gtk_label_set_xalign(GTK_LABEL(sizelabel2), 0.0);
+
     gtk_grid_attach(GTK_GRID(grid), namelabel, 0, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(grid), entry, 1, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(grid), sizelabel, 0, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), sizelabel2, 1, 1, 1, 1);
   } else {
     GtkWidget *namelabel = gtk_label_new("Name: ");
     gtk_label_set_xalign(GTK_LABEL(namelabel), 0.0);

@@ -61,6 +61,25 @@ void get_props(char *filename, struct fileprops * props) {
 
   props -> size_bytes = metadata.st_size;
 
+  if (props -> size_bytes > 1000) {
+    char buf[10];
+    if (props -> size_bytes > 1000000000) { //1 GB
+      float size = props -> size_bytes / 1000000000.0;
+      sprintf(buf, "%.1f", size);
+      strncat(buf, " GB", 4);
+    } else if (props -> size_bytes > 1000000) { // 1MB
+      float size = props -> size_bytes / 1000000.0;
+      sprintf(buf, "%.1f", size);
+      strncat(buf, " MB", 4);
+    }
+
+    float size = props -> size_bytes / 1000.0;
+    sprintf(buf, "%.1f", size);
+    strncat(buf, " KB", 4);
+
+    strncpy(props -> size, buf, 10);
+  }
+
   props -> isdir = (S_ISDIR(metadata.st_mode)) ? 1 : 0;
 }
 
