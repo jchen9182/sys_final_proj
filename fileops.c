@@ -23,12 +23,6 @@ void new_folder() {
     printf("Error %d: %s", errno, strerror(errno));
 }
 
-void rename_thing(char *oldname, char *newname) {
-  int status = rename(oldname, newname);
-  if (status < 0)
-    printf("Error %d: %s", errno, strerror(errno));
-}
-
 void remove_thing(char *thingname) {
   int status = remove(thingname);
   if (status < 0)
