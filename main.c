@@ -13,6 +13,8 @@ struct data {
   char filename[50];
   GtkWidget *btn;
   int isDir;
+  GtkWidget *grid;
+  GtkWidget *window;
 };
 
 int num_files;
@@ -33,7 +35,7 @@ void executefile(GtkWidget *menuitem, gpointer userdata) {
   if (d -> isDir == 0)
     run_file(d -> filename);
   else
-    printf("Opening folder \n");
+    printf("Sorry, changing directories would require a massive rewrite of this program. \n");
 }
 
 void deletefile(GtkWidget *menuitem, gpointer userdata) {
@@ -84,30 +86,23 @@ gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
     struct data *d = (struct data *)userdata;
     if (d -> isDir == 0)
       run_file(d -> filename);
-    else {
-      printf("Opening folder \n");
-      free_files();
-      chdir(d -> filename);
-      num_files = 0;
-      files = getfiles(&num_files);
-      gtk_main_iteration();
-    }
+    else
+      printf("Sorry, changing directories would require a massive rewrite of this program. \n")
   }
 
   return FALSE;
 }
 
 static void activate(GtkApplication *app, gpointer data) {
-  GtkWidget *window;
+  GtkWidget *window = gtk_application_window_new(app);
+  gtk_window_set_default_size(GTK_WINDOW(window), 900, 650);
+  gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
+
   GtkWidget *titlebar;
   GtkWidget *grid;
   char cwd[100];
   getcwd(cwd, 100);
   GtkWidget *cwdlabel = gtk_label_new(cwd);
-
-  window = gtk_application_window_new(app);
-  gtk_window_set_default_size(GTK_WINDOW(window), 900, 650);
-  gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
 
   titlebar = gtk_header_bar_new();
   gtk_header_bar_set_show_close_button(GTK_HEADER_BAR(titlebar), TRUE);
@@ -125,6 +120,7 @@ static void activate(GtkApplication *app, gpointer data) {
     printf("%s \n", files[i]);
     struct data * d = malloc(sizeof(struct data));
     strncpy(d -> filename, files[i], MAX_FILE_LEN);
+    d -> window = window;
 
     struct fileprops metadata;
     get_props(files[i], &metadata);
@@ -181,6 +177,7 @@ int main(int argc, char *argv[]) {
 
   g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
   int status = g_application_run(G_APPLICATION(app), argc, argv);
+  free_files();
   g_object_unref(app);
 
   return status;
