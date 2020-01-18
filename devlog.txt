@@ -57,3 +57,10 @@
 
 [2020-01-17] Samuel Fang
 - Fixed README.md
+
+[2020-01-17] Kevin Li
+- I seriously hope this fixed the memory corruption issue.
+  - Changed getfiles() to malloc an array of char pointers and individually malloc-ed space for each file (MAX_FILE_LEN).
+  - Previously, I just malloc-ed 100 * MAX_FILE_LEN once at the beginning of the function.
+  - This probably meant that the memory the strings initially took up wasn't protected and was "taken over" by an abundance of GTK widgets.
+  - Won't know if this issue is 100% fixed until I can test this on the school computers.

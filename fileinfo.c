@@ -11,13 +11,13 @@
 #define MAX_FILE_LEN 50
 
 char ** getfiles(int *num_files) {
-  char ** files = malloc(100 * MAX_FILE_LEN); //can be any size but I doubt we'll be testing in a folder w/ > 100 files/folders
+  char ** files = malloc(100 * sizeof(char *)); //can be any size but I doubt we'll be testing in a folder w/ > 100 files/folders
   DIR * dir = opendir("."); //current working directory for now as a proof of concept
   struct dirent * info = readdir(dir);
   while (info != NULL) {
     if (info -> d_name[0] != '.') { //conditional gets rid of hidden files/folders
-      files[*num_files] = info -> d_name;
-      strncat(files[*num_files], "\0", 1);
+      files[*num_files] = (char *)malloc(MAX_FILE_LEN);
+      strncpy(files[*num_files], info -> d_name, MAX_FILE_LEN);
       (*num_files)++;
     }
 

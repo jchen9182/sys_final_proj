@@ -109,9 +109,6 @@ static void activate(GtkApplication *app, gpointer data) {
   gtk_grid_set_column_spacing(GTK_GRID(grid), 30);
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(grid));
 
-  num_files = 0;
-  files = getfiles(&num_files);
-
   int i;
   int row, col = 0;
   for (i = 0; i < num_files; i++) {
@@ -168,6 +165,9 @@ int main(int argc, char *argv[]) {
     "org.mks65.fileexp",
     G_APPLICATION_FLAGS_NONE
   );
+
+  num_files = 0;
+  files = getfiles(&num_files);
 
   g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
   int status = g_application_run(G_APPLICATION(app), argc, argv);
