@@ -18,6 +18,14 @@ struct data {
 int num_files;
 char ** files;
 
+void free_files() {
+  int i;
+  for (i = 0; i < num_files; i++)
+    free(files[i]);
+
+  free(files);
+}
+
 void executefile(GtkWidget *menuitem, gpointer userdata) {
   struct data *d = (struct data *)userdata;
   char *filename = d -> filename;
@@ -78,6 +86,8 @@ gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
       run_file(d -> filename);
     else {
       printf("Opening folder \n");
+      free_files();
+      chdir(d -> filename);
       num_files = 0;
       files = getfiles(&num_files);
       gtk_main_iteration();
