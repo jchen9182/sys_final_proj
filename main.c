@@ -15,6 +15,7 @@ struct data {
   GtkWidget *btn;
   GtkWidget *label;
   GtkWidget *popover;
+  int called_from_popover;
   GtkWidget *box2;
 };
 
@@ -65,7 +66,8 @@ void entry_callback(GtkEntry *entry, gpointer userdata) {
     }
 
     strncpy(d -> filename, entry_text, MAX_FILE_LEN);
-    gtk_popover_popdown(GTK_POPOVER(d -> popover));
+    if (d -> called_from_popover == 1)
+      gtk_popover_popdown(GTK_POPOVER(d -> popover));
   } else {
     GtkWidget *label = gtk_label_new("A file with that name already exists.");
     gtk_label_set_xalign(GTK_LABEL(label), 0.0);
@@ -103,9 +105,45 @@ void renamefile(GtkWidget *menuitem, gpointer userdata) {
   gtk_container_add(GTK_CONTAINER(popover), box2);
   gtk_popover_popup(GTK_POPOVER(popover));
   d -> popover = popover;
+  d -> called_from_popover = 1;
 
   g_signal_connect(entry, "activate", G_CALLBACK(entry_callback), userdata);
   gtk_widget_show_all(popover);
+}
+
+void view_props(GtkWidget *menuitem, gpointer userdata) {
+  struct data *d = (struct data *)userdata;
+  char *filename = d -> filename;
+
+  GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_default_size(GTK_WINDOW(window), 500, 500);
+  char buf[MAX_FILE_LEN + 15];
+  strncpy(buf, filename, MAX_FILE_LEN);
+  strncat(buf, " Properties", 15);
+  gtk_window_set_title(GTK_WINDOW(window), buf);
+
+  GtkWidget *grid = gtk_grid_new();
+  gtk_grid_set_row_spacing(GTK_GRID(grid), 10);
+  gtk_grid_set_column_spacing(GTK_GRID(grid), 20);
+  gtk_container_set_border_width(GTK_CONTAINER(grid), 20);
+
+  GtkWidget *namelabel = gtk_label_new("Name: ");
+  gtk_label_set_xalign(GTK_LABEL(namelabel), 0.0);
+  GtkWidget *sizelabel = gtk_label_new("Size: ");
+  gtk_label_set_xalign(GTK_LABEL(sizelabel), 0.0);
+
+  GtkWidget *entry = gtk_entry_new();
+  gtk_entry_set_max_length(GTK_ENTRY(entry), MAX_FILE_LEN);
+  gtk_entry_set_text(GTK_ENTRY(entry), d -> filename);
+  d -> called_from_popover = 0;
+  g_signal_connect(entry, "activate", G_CALLBACK(entry_callback), userdata);
+
+  gtk_grid_attach(GTK_GRID(grid), namelabel, 0, 0, 1, 1);
+  gtk_grid_attach(GTK_GRID(grid), entry, 1, 0, 1, 1);
+  gtk_grid_attach(GTK_GRID(grid), sizelabel, 0, 1, 1, 1);
+
+  gtk_container_add(GTK_CONTAINER(window), grid);
+  gtk_widget_show_all(window);
 }
 
 gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
@@ -122,10 +160,14 @@ gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
     GtkWidget *rename = gtk_menu_item_new_with_label("Rename...");
     g_signal_connect(rename, "activate", G_CALLBACK(renamefile), userdata);
 
+    GtkWidget *viewprops = gtk_menu_item_new_with_label("Properties");
+    g_signal_connect(viewprops, "activate", G_CALLBACK(view_props), userdata);
+
     GtkWidget *menu = gtk_menu_new();
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), runfile);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), delete);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), rename);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), viewprops);
 
     gtk_widget_show_all(menu);
     gtk_menu_popup_at_pointer(GTK_MENU(menu), NULL);
@@ -138,6 +180,8 @@ gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
       run_file(d -> filename);
     else
       printf("Sorry, changing directories would require a massive rewrite of this program. \n");
+
+    return TRUE;
   }
 
   return FALSE;
