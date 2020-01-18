@@ -11,10 +11,11 @@
 
 struct data {
   char filename[50];
+  int isDir;
   GtkWidget *btn;
   GtkWidget *label;
   GtkWidget *popover;
-  int isDir;
+  GtkWidget *box2;
 };
 
 int num_files;
@@ -55,6 +56,11 @@ void entry_callback(GtkEntry *entry, gpointer userdata) {
     gtk_label_set_text(GTK_LABEL(d -> label), entry_text);
     strncpy(d -> filename, entry_text, MAX_FILE_LEN);
     gtk_popover_popdown(GTK_POPOVER(d -> popover));
+  } else {
+    GtkWidget *label = gtk_label_new("A file with that name already exists.");
+    gtk_label_set_xalign(GTK_LABEL(label), 0.0);
+    gtk_box_pack_start(GTK_BOX(d -> box2), label, FALSE, FALSE, 0);
+    gtk_widget_show_all(d -> box2);
   }
 }
 
@@ -79,6 +85,7 @@ void renamefile(GtkWidget *menuitem, gpointer userdata) {
   gtk_container_set_border_width(GTK_CONTAINER(box2), 10);
   gtk_box_pack_start(GTK_BOX(box2), label, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(box2), box, FALSE, FALSE, 0);
+  d -> box2 = box2;
 
   GtkWidget *popover = gtk_popover_new(d -> btn);
   gtk_popover_set_position(GTK_POPOVER(popover), GTK_POS_BOTTOM);

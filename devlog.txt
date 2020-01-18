@@ -67,5 +67,7 @@
 
 [2019-01-18] Kevin Li
 - Homogeneous spacing for the grid
-- Popover done
+- Popover after clicking "Rename" done
   - Bolding for the text in the popover
+- Rename files/folders
+  - Error checking so that you cannot have duplicate files/folders
