@@ -253,7 +253,7 @@ gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
 
 static void activate(GtkApplication *app, gpointer data) {
   GtkWidget *window = gtk_application_window_new(app);
-  gtk_window_set_default_size(GTK_WINDOW(window), 900, 650);
+  gtk_window_set_default_size(GTK_WINDOW(window), 900, 500);
   gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
 
   GtkWidget *titlebar;
@@ -268,7 +268,7 @@ static void activate(GtkApplication *app, gpointer data) {
   GtkWidget *separator = gtk_separator_menu_item_new();
   GtkWidget *newfile = gtk_menu_item_new_with_label("New File");
   GtkWidget *newfolder = gtk_menu_item_new_with_label("New Folder");
-  GtkWidget *about = gtk_menu_item_new_with_label("About this project");
+  GtkWidget *about = gtk_menu_item_new_with_label("About");
   //g_signal_connect(newfile, "activate", G_CALLBACK(newfile), NULL);
 
   GtkWidget *optionsmenu = gtk_menu_new();
@@ -305,6 +305,7 @@ static void activate(GtkApplication *app, gpointer data) {
     d -> metadata = metadata;
 
     GtkWidget *iconbutton = gtk_button_new();
+    gtk_button_set_relief(GTK_BUTTON(iconbutton), GTK_RELIEF_NONE); //gets rid of borders
     GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
 
     if (metadata.isdir == 0) {
@@ -328,9 +329,8 @@ static void activate(GtkApplication *app, gpointer data) {
 
     GtkWidget *filename = gtk_label_new(buf);
     gtk_label_set_justify(GTK_LABEL(filename), GTK_JUSTIFY_CENTER);
-    gtk_label_set_line_wrap(GTK_LABEL(filename), TRUE);
     gtk_label_set_max_width_chars(GTK_LABEL(filename), 1);
-    gtk_label_set_lines(GTK_LABEL(filename), 3);
+    gtk_label_set_ellipsize(GTK_LABEL(filename), PANGO_ELLIPSIZE_END);
     gtk_box_pack_start(GTK_BOX(box), filename, FALSE, FALSE, 0);
     d -> label = filename;
 

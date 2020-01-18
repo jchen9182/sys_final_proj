@@ -66,6 +66,9 @@
   - Won't know if this issue is 100% fixed until I can test this on the school computers.
 
 [2019-01-18] Kevin Li
+- Get rid of button/file borders
+- Use Nautilus file and folder icons rather than generic icons
+- Line wrap is broken. Using ellipsize instead to at least have some protection against super long file names.
 - Homogeneous spacing for the grid
 - Popover after clicking "Rename" done
   - Bolding for the text in the popover
