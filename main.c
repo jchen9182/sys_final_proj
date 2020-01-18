@@ -15,6 +15,9 @@ struct data {
   int isDir;
 };
 
+int num_files;
+char ** files;
+
 void executefile(GtkWidget *menuitem, gpointer userdata) {
   struct data *d = (struct data *)userdata;
   char *filename = d -> filename;
@@ -73,17 +76,18 @@ gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
     struct data *d = (struct data *)userdata;
     if (d -> isDir == 0)
       run_file(d -> filename);
-    else
+    else {
       printf("Opening folder \n");
+      num_files = 0;
+      files = getfiles(&num_files);
+      gtk_main_iteration();
+    }
   }
 
   return FALSE;
 }
 
 static void activate(GtkApplication *app, gpointer data) {
-  int num_files = 0;
-  char ** files = getfiles(&num_files);
-
   GtkWidget *window;
   GtkWidget *titlebar;
   GtkWidget *grid;
@@ -104,6 +108,9 @@ static void activate(GtkApplication *app, gpointer data) {
   gtk_grid_set_row_spacing(GTK_GRID(grid), 5);
   gtk_grid_set_column_spacing(GTK_GRID(grid), 30);
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(grid));
+
+  num_files = 0;
+  files = getfiles(&num_files);
 
   int i;
   int row, col = 0;

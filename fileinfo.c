@@ -17,6 +17,7 @@ char ** getfiles(int *num_files) {
   while (info != NULL) {
     if (info -> d_name[0] != '.') { //conditional gets rid of hidden files/folders
       files[*num_files] = info -> d_name;
+      strncat(files[*num_files], "\0", 1);
       (*num_files)++;
     }
 
@@ -84,9 +85,10 @@ char * get_properties(char *file_name) {
 	  get_ext(file_name, ext);
     strcat(properties, ext);
     strcat(properties, "\n");
-  } else
-    strcat(properties, "Type: directory \n");
-    return properties;
+  }
+
+  strcat(properties, "Type: directory \n");
+  return properties;
 }
 
 char * get_dir() {
