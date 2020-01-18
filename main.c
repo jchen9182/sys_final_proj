@@ -134,6 +134,8 @@ void view_props(GtkWidget *menuitem, gpointer userdata) {
     gtk_label_set_xalign(GTK_LABEL(namelabel), 0.0);
     GtkWidget *sizelabel = gtk_label_new("Size: ");
     gtk_label_set_xalign(GTK_LABEL(sizelabel), 0.0);
+    GtkWidget *parentfolder_label = gtk_label_new("Parent folder: ");
+    gtk_label_set_xalign(GTK_LABEL(parentfolder_label), 0.0);
 
     GtkWidget *entry = gtk_entry_new();
     gtk_entry_set_max_length(GTK_ENTRY(entry), MAX_FILE_LEN);
@@ -158,13 +160,22 @@ void view_props(GtkWidget *menuitem, gpointer userdata) {
     GtkWidget *sizelabel2 = gtk_label_new(buf);
     gtk_label_set_xalign(GTK_LABEL(sizelabel2), 0.0);
 
+    char cwd[100];
+    getcwd(cwd, 100);
+    GtkWidget *parentfolder_label2 = gtk_label_new(cwd);
+    gtk_label_set_xalign(GTK_LABEL(parentfolder_label2), 0.0);
+
     gtk_grid_attach(GTK_GRID(grid), namelabel, 0, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(grid), entry, 1, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(grid), sizelabel, 0, 1, 1, 1);
     gtk_grid_attach(GTK_GRID(grid), sizelabel2, 1, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), parentfolder_label, 0, 2, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), parentfolder_label2, 1, 2, 1, 1);
   } else {
     GtkWidget *namelabel = gtk_label_new("Name: ");
     gtk_label_set_xalign(GTK_LABEL(namelabel), 0.0);
+    GtkWidget *parentfolder_label = gtk_label_new("Parent folder: ");
+    gtk_label_set_xalign(GTK_LABEL(parentfolder_label), 0.0);
 
     GtkWidget *entry = gtk_entry_new();
     gtk_entry_set_max_length(GTK_ENTRY(entry), MAX_FILE_LEN);
@@ -172,8 +183,15 @@ void view_props(GtkWidget *menuitem, gpointer userdata) {
     d -> called_from_popover = 0;
     g_signal_connect(entry, "activate", G_CALLBACK(entry_callback), userdata);
 
+    char cwd[100];
+    getcwd(cwd, 100);
+    GtkWidget *parentfolder_label2 = gtk_label_new(cwd);
+    gtk_label_set_xalign(GTK_LABEL(parentfolder_label2), 0.0);
+
     gtk_grid_attach(GTK_GRID(grid), namelabel, 0, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(grid), entry, 1, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), parentfolder_label, 0, 2, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), parentfolder_label2, 1, 2, 1, 1);
   }
 
   gtk_container_add(GTK_CONTAINER(window), grid);

@@ -75,3 +75,4 @@
 - Work on properties
   - Ability to rename a file/folder from within the properties menu
   - Show size of files (switching to KB, MB, GB as necessary)
+  - Show parent directory (this repo, since we're not moving anywhere)
