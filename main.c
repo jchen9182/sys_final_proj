@@ -136,6 +136,10 @@ void view_props(GtkWidget *menuitem, gpointer userdata) {
     gtk_label_set_xalign(GTK_LABEL(sizelabel), 0.0);
     GtkWidget *parentfolder_label = gtk_label_new("Parent folder: ");
     gtk_label_set_xalign(GTK_LABEL(parentfolder_label), 0.0);
+    GtkWidget *permslabel = gtk_label_new("Permissions: ");
+    gtk_label_set_xalign(GTK_LABEL(permslabel), 0.0);
+    GtkWidget *permslabel2 = gtk_label_new(metadata.perms);
+    gtk_label_set_xalign(GTK_LABEL(permslabel2), 0.0);
 
     GtkWidget *entry = gtk_entry_new();
     gtk_entry_set_max_length(GTK_ENTRY(entry), MAX_FILE_LEN);
@@ -171,11 +175,17 @@ void view_props(GtkWidget *menuitem, gpointer userdata) {
     gtk_grid_attach(GTK_GRID(grid), sizelabel2, 1, 1, 1, 1);
     gtk_grid_attach(GTK_GRID(grid), parentfolder_label, 0, 2, 1, 1);
     gtk_grid_attach(GTK_GRID(grid), parentfolder_label2, 1, 2, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), permslabel, 0, 3, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), permslabel2, 1, 3, 1, 1);
   } else {
     GtkWidget *namelabel = gtk_label_new("Name: ");
     gtk_label_set_xalign(GTK_LABEL(namelabel), 0.0);
     GtkWidget *parentfolder_label = gtk_label_new("Parent folder: ");
     gtk_label_set_xalign(GTK_LABEL(parentfolder_label), 0.0);
+    GtkWidget *permslabel = gtk_label_new("Permissions: ");
+    gtk_label_set_xalign(GTK_LABEL(permslabel), 0.0);
+    GtkWidget *permslabel2 = gtk_label_new(metadata.perms);
+    gtk_label_set_xalign(GTK_LABEL(permslabel2), 0.0);
 
     GtkWidget *entry = gtk_entry_new();
     gtk_entry_set_max_length(GTK_ENTRY(entry), MAX_FILE_LEN);
@@ -192,6 +202,8 @@ void view_props(GtkWidget *menuitem, gpointer userdata) {
     gtk_grid_attach(GTK_GRID(grid), entry, 1, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(grid), parentfolder_label, 0, 2, 1, 1);
     gtk_grid_attach(GTK_GRID(grid), parentfolder_label2, 1, 2, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), permslabel, 0, 3, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), permslabel2, 1, 3, 1, 1);
   }
 
   gtk_container_add(GTK_CONTAINER(window), grid);
