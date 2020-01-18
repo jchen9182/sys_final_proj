@@ -22,6 +22,7 @@ This project is a GUI-based file explorer. Examples would include File Explorer 
   - ```sudo apt install pkg-config``` (not technically "necessary", but the way GTK programs are compiled, it is best to have this installed. You are required to have this installed to use the makefile provided in this directory.)
 
 **Instructions for running this project**
+
 Type into a terminal session with the current directory being this repo:
 ```bash
 make
