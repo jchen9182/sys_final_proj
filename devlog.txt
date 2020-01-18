@@ -71,3 +71,4 @@
   - Bolding for the text in the popover
 - Rename files/folders
   - Error checking so that you cannot have duplicate files/folders
+  - Pre-fill existing file's name so you don't have to retype the whole thing in case you only want to make a minor adjustment

@@ -54,6 +54,16 @@ void entry_callback(GtkEntry *entry, gpointer userdata) {
 
   if (rename(filename, entry_text) == 0) {
     gtk_label_set_text(GTK_LABEL(d -> label), entry_text);
+
+    //Truncate file names that are too long
+    char buf[35];
+    if (strlen(entry_text) > 25) {
+      strncpy(buf, entry_text, 24);
+      strncat(buf, "...", 4);
+    } else {
+      strncpy(buf, entry_text, 25);
+    }
+
     strncpy(d -> filename, entry_text, MAX_FILE_LEN);
     gtk_popover_popdown(GTK_POPOVER(d -> popover));
   } else {
@@ -69,6 +79,7 @@ void renamefile(GtkWidget *menuitem, gpointer userdata) {
 
   GtkWidget *entry = gtk_entry_new();
   gtk_entry_set_max_length(GTK_ENTRY(entry), MAX_FILE_LEN);
+  gtk_entry_set_text(GTK_ENTRY(entry), d -> filename);
 
   GtkWidget *renamebutton = gtk_button_new_with_label("Rename");
 
@@ -165,15 +176,6 @@ static void activate(GtkApplication *app, gpointer data) {
     struct fileprops metadata;
     get_props(files[i], &metadata);
 
-    //Truncate file names that are too long
-    char buf[35];
-    if (strlen(files[i]) > 25) {
-      strncpy(buf, files[i], 24);
-      strncat(buf, "...", 4);
-    } else {
-      strncpy(buf, files[i], 25);
-    }
-
     GtkWidget *iconbutton = gtk_button_new();
     GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
 
@@ -185,6 +187,15 @@ static void activate(GtkApplication *app, gpointer data) {
       GtkWidget *folderimg = gtk_image_new_from_file("foldericon.png");
       gtk_box_pack_start(GTK_BOX(box), folderimg, FALSE, FALSE, 0);
       d -> isDir = 1;
+    }
+
+    //Truncate file names that are too long
+    char buf[35];
+    if (strlen(files[i]) > 25) {
+      strncpy(buf, files[i], 24);
+      strncat(buf, "...", 4);
+    } else {
+      strncpy(buf, files[i], 25);
     }
 
     GtkWidget *filename = gtk_label_new(buf);
