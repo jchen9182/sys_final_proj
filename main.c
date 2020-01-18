@@ -49,11 +49,30 @@ void renamefile(GtkWidget *menuitem, gpointer userdata) {
   struct data *d = (struct data *)userdata;
   char *filename = d -> filename;
 
-  GtkWidget *popover = gtk_popover_new(d -> btn);
-  gtk_popover_popup(GTK_POPOVER(popover));
-  gtk_popover_set_position(GTK_POPOVER(popover), GTK_POS_BOTTOM);
   GtkWidget *entry = gtk_entry_new();
   gtk_entry_set_max_length(GTK_ENTRY(entry), MAX_FILE_LEN);
+
+  GtkWidget *renamebutton = gtk_button_new_with_label("Rename");
+
+  GtkWidget *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
+  gtk_box_pack_start(GTK_BOX(box), entry, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(box), renamebutton, FALSE, FALSE, 0);
+
+  GtkWidget *label = gtk_label_new(NULL);
+  const char *format = "<b>File name</b>";
+  gtk_label_set_xalign(GTK_LABEL(label), 0.0);
+  gtk_label_set_markup(GTK_LABEL(label), format);
+
+  GtkWidget *box2 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+  gtk_container_set_border_width(GTK_CONTAINER(box2), 10);
+  gtk_box_pack_start(GTK_BOX(box2), label, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(box2), box, FALSE, FALSE, 0);
+
+  GtkWidget *popover = gtk_popover_new(d -> btn);
+  gtk_popover_set_position(GTK_POPOVER(popover), GTK_POS_BOTTOM);
+  gtk_container_add(GTK_CONTAINER(popover), box2);
+  gtk_popover_popup(GTK_POPOVER(popover));
+  gtk_widget_show_all(popover);
 
   //g_signal_connect(entry, "activate", G_CALLBACK(entry_callback), userdata);
 }
@@ -87,7 +106,7 @@ gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
     if (d -> isDir == 0)
       run_file(d -> filename);
     else
-      printf("Sorry, changing directories would require a massive rewrite of this program. \n")
+      printf("Sorry, changing directories would require a massive rewrite of this program. \n");
   }
 
   return FALSE;
@@ -150,7 +169,7 @@ static void activate(GtkApplication *app, gpointer data) {
     GtkWidget *filename = gtk_label_new(buf);
     gtk_label_set_line_wrap(GTK_LABEL(filename), TRUE);
     gtk_label_set_max_width_chars(GTK_LABEL(filename), 1);
-    gtk_box_pack_start(GTK_BOX(box), filename, FALSE, FALSE, 1);
+    gtk_box_pack_start(GTK_BOX(box), filename, FALSE, FALSE, 0);
 
     g_signal_connect(iconbutton, "button_press_event", G_CALLBACK(btn_press), d);
     gtk_container_add(GTK_CONTAINER(iconbutton), box);
