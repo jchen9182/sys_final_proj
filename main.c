@@ -17,6 +17,7 @@ struct data {
   GtkWidget *popover;
   int called_from_popover;
   GtkWidget *box2;
+  struct fileprops metadata;
 };
 
 int num_files;
@@ -114,6 +115,7 @@ void renamefile(GtkWidget *menuitem, gpointer userdata) {
 void view_props(GtkWidget *menuitem, gpointer userdata) {
   struct data *d = (struct data *)userdata;
   char *filename = d -> filename;
+  struct fileprops metadata = d -> metadata;
 
   GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size(GTK_WINDOW(window), 500, 500);
@@ -127,20 +129,34 @@ void view_props(GtkWidget *menuitem, gpointer userdata) {
   gtk_grid_set_column_spacing(GTK_GRID(grid), 20);
   gtk_container_set_border_width(GTK_CONTAINER(grid), 20);
 
-  GtkWidget *namelabel = gtk_label_new("Name: ");
-  gtk_label_set_xalign(GTK_LABEL(namelabel), 0.0);
-  GtkWidget *sizelabel = gtk_label_new("Size: ");
-  gtk_label_set_xalign(GTK_LABEL(sizelabel), 0.0);
+  if (metadata.isdir == 0) {
+    GtkWidget *namelabel = gtk_label_new("Name: ");
+    gtk_label_set_xalign(GTK_LABEL(namelabel), 0.0);
+    GtkWidget *sizelabel = gtk_label_new("Size: ");
+    gtk_label_set_xalign(GTK_LABEL(sizelabel), 0.0);
 
-  GtkWidget *entry = gtk_entry_new();
-  gtk_entry_set_max_length(GTK_ENTRY(entry), MAX_FILE_LEN);
-  gtk_entry_set_text(GTK_ENTRY(entry), d -> filename);
-  d -> called_from_popover = 0;
-  g_signal_connect(entry, "activate", G_CALLBACK(entry_callback), userdata);
+    GtkWidget *entry = gtk_entry_new();
+    gtk_entry_set_max_length(GTK_ENTRY(entry), MAX_FILE_LEN);
+    gtk_entry_set_text(GTK_ENTRY(entry), d -> filename);
+    d -> called_from_popover = 0;
+    g_signal_connect(entry, "activate", G_CALLBACK(entry_callback), userdata);
 
-  gtk_grid_attach(GTK_GRID(grid), namelabel, 0, 0, 1, 1);
-  gtk_grid_attach(GTK_GRID(grid), entry, 1, 0, 1, 1);
-  gtk_grid_attach(GTK_GRID(grid), sizelabel, 0, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), namelabel, 0, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), entry, 1, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), sizelabel, 0, 1, 1, 1);
+  } else {
+    GtkWidget *namelabel = gtk_label_new("Name: ");
+    gtk_label_set_xalign(GTK_LABEL(namelabel), 0.0);
+
+    GtkWidget *entry = gtk_entry_new();
+    gtk_entry_set_max_length(GTK_ENTRY(entry), MAX_FILE_LEN);
+    gtk_entry_set_text(GTK_ENTRY(entry), d -> filename);
+    d -> called_from_popover = 0;
+    g_signal_connect(entry, "activate", G_CALLBACK(entry_callback), userdata);
+
+    gtk_grid_attach(GTK_GRID(grid), namelabel, 0, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), entry, 1, 0, 1, 1);
+  }
 
   gtk_container_add(GTK_CONTAINER(window), grid);
   gtk_widget_show_all(window);
@@ -219,6 +235,7 @@ static void activate(GtkApplication *app, gpointer data) {
 
     struct fileprops metadata;
     get_props(files[i], &metadata);
+    d -> metadata = metadata;
 
     GtkWidget *iconbutton = gtk_button_new();
     GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
