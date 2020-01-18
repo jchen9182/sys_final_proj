@@ -77,3 +77,4 @@
   - Show size of files (switching to KB, MB, GB as necessary)
   - Show parent directory (this repo, since we're not moving anywhere)
   - Show permissions (in rwxrwxrwx form)
+- Groundwork for creating new files/folders

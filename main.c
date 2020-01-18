@@ -264,7 +264,26 @@ static void activate(GtkApplication *app, gpointer data) {
 
   titlebar = gtk_header_bar_new();
   gtk_header_bar_set_show_close_button(GTK_HEADER_BAR(titlebar), TRUE);
+
+  GtkWidget *separator = gtk_separator_menu_item_new();
+  GtkWidget *newfile = gtk_menu_item_new_with_label("New File");
+  GtkWidget *newfolder = gtk_menu_item_new_with_label("New Folder");
+  GtkWidget *about = gtk_menu_item_new_with_label("About this project");
+  //g_signal_connect(newfile, "activate", G_CALLBACK(newfile), NULL);
+
+  GtkWidget *optionsmenu = gtk_menu_new();
+  gtk_menu_shell_append(GTK_MENU_SHELL(optionsmenu), newfile);
+  gtk_menu_shell_append(GTK_MENU_SHELL(optionsmenu), newfolder);
+  gtk_menu_shell_append(GTK_MENU_SHELL(optionsmenu), separator);
+  gtk_menu_shell_append(GTK_MENU_SHELL(optionsmenu), about);
+  gtk_widget_show_all(optionsmenu);
+
+  GtkWidget *menubutton = gtk_menu_button_new();
+  gtk_menu_button_set_popup(GTK_MENU_BUTTON(menubutton), optionsmenu);
+  gtk_menu_button_set_direction(GTK_MENU_BUTTON(menubutton), GTK_ARROW_DOWN);
+
   gtk_header_bar_pack_start(GTK_HEADER_BAR(titlebar), cwdlabel);
+  gtk_header_bar_pack_end(GTK_HEADER_BAR(titlebar), menubutton);
   gtk_window_set_titlebar(GTK_WINDOW(window), titlebar);
 
   grid = gtk_grid_new();
