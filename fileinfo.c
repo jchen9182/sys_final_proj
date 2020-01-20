@@ -29,6 +29,19 @@ char ** getfiles(int *num_files) {
   return files;
 }
 
+int file_exists(const char *filename) {
+  DIR *dir = opendir(".");
+  struct dirent *info = readdir(dir);
+  while (info != NULL) {
+    if (strcmp(filename, info -> d_name) == 0)
+      return 1;
+
+    info = readdir(dir);
+  }
+
+  return 0;
+}
+
 void get_ext(char *filename, char *buff) {
   int i = strlen(filename) - 1;
   while (i >= 0) { //loop backwards to find the '.'; not aware of a backwards strsep and this is easy anyway

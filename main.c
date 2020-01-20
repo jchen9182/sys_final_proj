@@ -55,7 +55,8 @@ void entry_callback(GtkEntry *entry, gpointer userdata) {
   struct data *d = (struct data *)userdata;
   char *filename = d -> filename;
 
-  if (rename(filename, entry_text) == 0) {
+  if (file_exists(entry_text) == 0) {
+    rename(filename, entry_text);
     gtk_label_set_text(GTK_LABEL(d -> label), entry_text);
 
     //Truncate file names that are too long
