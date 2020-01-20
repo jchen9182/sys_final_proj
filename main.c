@@ -12,8 +12,6 @@
 struct data {
   char filename[50];
   int isDir, col, row;
-  GtkApplication *app;
-  GtkWidget *window;
   GtkWidget *grid;
   GtkWidget *btn;
   GtkWidget *label;
@@ -25,8 +23,6 @@ struct data {
 
 int num_files;
 char ** files;
-
-struct data * icon_location;
 
 void free_files() {
   int i;
@@ -217,7 +213,6 @@ void view_props(GtkWidget *menuitem, gpointer userdata) {
 
 void create_new_file(GtkWidget *newfile, gpointer userdata) { // Broken
   struct data *d = (struct data *)userdata;
-  GtkWidget *window = d -> window;
   GtkWidget *grid = d -> grid;
   int col = d -> col;
   int row = d -> row;
@@ -239,7 +234,7 @@ void create_new_file(GtkWidget *newfile, gpointer userdata) { // Broken
   // icon_location -> col = col;
   // icon_location -> row = row;
 
-  gtk_widget_show_all(window);
+  gtk_widget_show_all(grid);
 }
 
 void create_new_folder(GtkWidget *newFolder, gpointer userdata) { // Broken
@@ -247,10 +242,7 @@ void create_new_folder(GtkWidget *newFolder, gpointer userdata) { // Broken
 }
 
 void about_box(GtkWidget *about, gpointer userdata) {
-  struct data *d = (struct data *)userdata;
-  GtkApplication *app = d -> app;
-
-  GtkWidget *window = gtk_application_window_new(app);
+  GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size(GTK_WINDOW(window), 100, 100);
   gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
   gtk_window_set_title(GTK_WINDOW(window), "About");
@@ -333,10 +325,7 @@ static void activate(GtkApplication *app, gpointer data) {
   gtk_menu_shell_append(GTK_MENU_SHELL(optionsmenu), separator);
   gtk_menu_shell_append(GTK_MENU_SHELL(optionsmenu), about);
 
-  struct data * aboutdata = malloc(sizeof(struct data));
-  aboutdata -> app = app;
-
-  g_signal_connect(about, "activate", G_CALLBACK(about_box), aboutdata);
+  g_signal_connect(about, "activate", G_CALLBACK(about_box), NULL);
 
   gtk_widget_show_all(optionsmenu);
 
