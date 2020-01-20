@@ -6,14 +6,15 @@
 
 //Looking for the properties of a file? Check out fileinfo.c.
 
-void new_file() {
-  int fd = open("Untitled Document", O_CREAT | O_EXCL, 0666);
+int new_file(char *name) {
+  int fd = open(name, O_CREAT | O_EXCL, 0666);
   printf("fd: %d \n", fd);
 
   if (fd < 0)
-    fd = open("Untitled Document 2", O_CREAT, 0666);
+    return 0;
 
   printf("File created! \n");
+  return 1;
 }
 
 void new_folder() {

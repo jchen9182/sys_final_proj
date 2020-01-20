@@ -12,6 +12,9 @@
 struct data {
   char filename[50];
   int isDir;
+  GtkApplication *app;
+  GtkWidget *window;
+  GtkWidget *grid;
   GtkWidget *btn;
   GtkWidget *label;
   GtkWidget *popover;
@@ -210,6 +213,40 @@ void view_props(GtkWidget *menuitem, gpointer userdata) {
   gtk_widget_show_all(window);
 }
 
+void create_new_file(GtkWidget *newfile, gpointer userdata) { /// BROKEN
+  struct data *d = (struct data *)userdata;
+  GtkWidget *window = d -> window;
+  GtkWidget *grid = d -> grid;
+
+  GtkWidget *iconbutton = gtk_button_new();
+  gtk_button_set_relief(GTK_BUTTON(iconbutton), GTK_RELIEF_NONE); //gets rid of borders
+  GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+  GtkWidget *iconimg = gtk_image_new_from_file("fileicon.png");
+  gtk_box_pack_start(GTK_BOX(box), iconimg, FALSE, FALSE, 0);
+
+  // gtk_container_add(GTK_CONTAINER(iconbutton), box);
+  // gtk_grid_attach(GTK_GRID(grid), iconbutton, 5, 3, 1, 1);
+  
+  gtk_widget_show_all(window);
+}
+
+void about_box(GtkWidget *about, gpointer userdata) {
+  struct data *d = (struct data *)userdata;
+  GtkApplication *app = d -> app;
+
+  GtkWidget *window = gtk_application_window_new(app);
+  gtk_window_set_default_size(GTK_WINDOW(window), 100, 100);
+  gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
+  gtk_window_set_title(GTK_WINDOW(window), "About");
+  gtk_window_move(GTK_WINDOW(window), 380, 200);
+
+  GtkWidget *label = gtk_label_new("This is our file explorer.\nBy: Justin Chen, Kevin Li, and Samuel Fang");
+  gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_CENTER);
+
+  gtk_container_add(GTK_CONTAINER(window), label);
+  gtk_widget_show_all(window);
+}
+
 gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
   if (event -> type == GDK_BUTTON_PRESS && event -> button == 3) { //right mouse button
     struct data *d = (struct data *)userdata;
@@ -269,13 +306,18 @@ static void activate(GtkApplication *app, gpointer data) {
   GtkWidget *newfile = gtk_menu_item_new_with_label("New File");
   GtkWidget *newfolder = gtk_menu_item_new_with_label("New Folder");
   GtkWidget *about = gtk_menu_item_new_with_label("About");
-  //g_signal_connect(newfile, "activate", G_CALLBACK(newfile), NULL);
 
   GtkWidget *optionsmenu = gtk_menu_new();
   gtk_menu_shell_append(GTK_MENU_SHELL(optionsmenu), newfile);
   gtk_menu_shell_append(GTK_MENU_SHELL(optionsmenu), newfolder);
   gtk_menu_shell_append(GTK_MENU_SHELL(optionsmenu), separator);
   gtk_menu_shell_append(GTK_MENU_SHELL(optionsmenu), about);
+
+  struct data * aboutdata = malloc(sizeof(struct data));
+  aboutdata -> app = app;
+
+  g_signal_connect(about, "activate", G_CALLBACK(about_box), aboutdata);
+
   gtk_widget_show_all(optionsmenu);
 
   GtkWidget *menubutton = gtk_menu_button_new();
@@ -292,6 +334,11 @@ static void activate(GtkApplication *app, gpointer data) {
   gtk_grid_set_column_homogeneous(GTK_GRID(grid), TRUE);
   gtk_container_set_border_width(GTK_CONTAINER(grid), 20);
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(grid));
+
+  struct data * w = malloc(sizeof(struct data));
+  w -> window = window;
+  w -> grid = grid;
+  g_signal_connect(newfile, "activate", G_CALLBACK(create_new_file), w);
 
   int i;
   int row, col = 0;
