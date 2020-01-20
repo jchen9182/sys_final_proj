@@ -574,9 +574,6 @@ int main(int argc, char *argv[]) {
   g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
   int status = g_application_run(G_APPLICATION(app), argc, argv);
   free_files();
-g_application_quit(G_APPLICATION(app)); 
-g_application_quit(G_APPLICATION(app)); 
-g_application_quit(G_APPLICATION(app)); 
   g_object_unref(app);
 }
   return status;
