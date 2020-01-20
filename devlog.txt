@@ -82,6 +82,11 @@
   - Show permissions (in rwxrwxrwx form)
 - Groundwork for creating new files/folders
 
+[2020-01-19] Justin Chen
+- Added about popup box
+- Attemped creating file and folder
+  - Have to fix seg fault from the global icon_location struct
+
 [2020-01-19] Kevin Li
 - Check before renaming a file so it doesn't get overwritten
 - Create file
