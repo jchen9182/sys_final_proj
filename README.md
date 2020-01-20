@@ -30,7 +30,23 @@ make run
 ```
 
 **How to use this program**
-
+- Whatever is done from within this program should be reflected in a separate Nautilus window in the same directory (this repo).
+- Click a file with the right mouse button, which will bring up these options:
+  - Open
+    - Opens the selected file according to its file extension. i.e. .png with eog and .txt with gedit.
+  - Delete (self explanatory, but gets entirely deleted rather than moving to the Trash)
+  - Rename (will not allow you to rename to a file/folder that already exists)
+  - Properties, where you may view:
+    - The name of the file (can rename it from inside this window as well)
+    - Size (both in bytes and converted to units like KB, MB, GB when appropriate)
+    - Parent folder (this repo, since this program doesn't support changing folders)
+    - Permissions in rwxrwxrwx form
+    - The properties window is reduced for folders. For example, there is no point in displaying the size of a folder.
+- Double click a file to open it as well
+- The arrow in the top right of the window:
+  - New File/Folder (same implementation)
+    - Like rename, will not allow you to create a file/folder that already exists
+  - About: shows description of project
 
 **Known bugs**
 - [POSSIBLE] Earlier in the project, there was a memory corruption bug that led to undefined behavior.

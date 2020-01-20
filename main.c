@@ -90,11 +90,8 @@ void renamefile(GtkWidget *menuitem, gpointer userdata) {
   gtk_entry_set_max_length(GTK_ENTRY(entry), MAX_FILE_LEN);
   gtk_entry_set_text(GTK_ENTRY(entry), d -> filename);
 
-  GtkWidget *renamebutton = gtk_button_new_with_label("Rename");
-
   GtkWidget *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
   gtk_box_pack_start(GTK_BOX(box), entry, FALSE, FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(box), renamebutton, FALSE, FALSE, 0);
 
   GtkWidget *label = gtk_label_new(NULL);
   const char *format = "<b>File name</b>";
@@ -114,7 +111,6 @@ void renamefile(GtkWidget *menuitem, gpointer userdata) {
   d -> popover = popover;
   d -> called_from_popover = 1;
 
-  g_signal_connect(renamebutton, "activate", G_CALLBACK(entry_callback), userdata);
   g_signal_connect(entry, "activate", G_CALLBACK(entry_callback), userdata);
   gtk_widget_show_all(popover);
 }
