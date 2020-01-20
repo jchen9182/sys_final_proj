@@ -42,7 +42,7 @@ int file_exists(const char *filename) {
   return 0;
 }
 
-void get_ext(char *filename, char *buff) {
+void get_ext(const char *filename, char *buff) {
   int i = strlen(filename) - 1;
   while (i >= 0) { //loop backwards to find the '.'; not aware of a backwards strsep and this is easy anyway
     if (filename[i] == '.') {
@@ -56,7 +56,7 @@ void get_ext(char *filename, char *buff) {
 	strcpy(buff, "\0"); //period not found; make the extension a null-ended string which gets returned
 }
 
-void get_props(char *filename, struct fileprops * props) {
+void get_props(const char *filename, struct fileprops * props) {
   struct stat metadata;
   stat(filename, &metadata);
 

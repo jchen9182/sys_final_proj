@@ -1,5 +1,5 @@
 int new_file(const char *name);
 
-void new_folder();
+int new_folder(const char *name);
 
-void remove_thing(char *thingname);
+void remove_thing(const char *thingname);

@@ -17,14 +17,17 @@ int new_file(const char *name) {
   return 1;
 }
 
-void new_folder() {
-  int folder = mkdir("New Folder", 0755);
+int new_folder(const char *name) {
+  int folder = mkdir(name, 0755);
 
   if (folder < 0)
-    printf("Error %d: %s", errno, strerror(errno));
+    return 0;
+
+  printf("Folder created! \n");
+  return 1;
 }
 
-void remove_thing(char *thingname) {
+void remove_thing(const char *thingname) {
   int status = remove(thingname);
   if (status < 0)
     printf("Error %d: %s", errno, strerror(errno));

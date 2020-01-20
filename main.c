@@ -266,6 +266,7 @@ void createfile_callback(GtkEntry *entry, gpointer userdata) {
     } else
       gtk_grid_attach(GTK_GRID(grid), iconbutton, col++, row, 1, 1);
 
+
     icondata -> col = col;
     icondata -> row = row;
     d -> col = col;
@@ -273,7 +274,70 @@ void createfile_callback(GtkEntry *entry, gpointer userdata) {
     gtk_widget_destroy(d -> window);
     gtk_widget_show_all(grid);
   } else {
-    GtkWidget *label = gtk_label_new("A file with that name already exists.");
+    GtkWidget *label = gtk_label_new("A file/folder with that name already exists.");
+    gtk_label_set_xalign(GTK_LABEL(label), 0.0);
+    gtk_box_pack_start(GTK_BOX(d -> box2), label, FALSE, FALSE, 0);
+    gtk_widget_show_all(d -> box2);
+  }
+}
+
+void createfolder_callback(GtkEntry *entry, gpointer userdata) {
+  struct data *d = malloc(sizeof(struct data));
+  struct data *icondata = (struct data *)userdata;
+  d -> grid = icondata -> grid;
+  d -> col = icondata -> col;
+  d -> row = icondata -> row;
+  d -> box2 = icondata -> box2;
+  d -> window = icondata -> window;
+
+  GtkWidget *grid = d -> grid;
+  int col = d -> col;
+  int row = d -> row;
+
+  const gchar *entry_text = gtk_entry_get_text(entry);
+  printf("Entry contents: %s \n", entry_text);
+
+  int newfolder = new_folder(entry_text);
+  if (newfolder == 1) {
+    d -> isDir = 1;
+    strncpy(d -> filename, entry_text, MAX_FILE_LEN);
+    struct fileprops metadata;
+    get_props(entry_text, &metadata);
+    d -> metadata = metadata;
+
+    GtkWidget *iconbutton = gtk_button_new();
+    gtk_button_set_relief(GTK_BUTTON(iconbutton), GTK_RELIEF_NONE);
+    GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+    GtkWidget *iconimg = gtk_image_new_from_file("foldericon.png");
+
+    GtkWidget *filename = gtk_label_new(entry_text);
+    gtk_label_set_justify(GTK_LABEL(filename), GTK_JUSTIFY_CENTER);
+    gtk_label_set_max_width_chars(GTK_LABEL(filename), 1);
+    gtk_label_set_ellipsize(GTK_LABEL(filename), PANGO_ELLIPSIZE_END);
+    d -> label = filename;
+
+    gtk_box_pack_start(GTK_BOX(box), iconimg, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(box), filename, FALSE, FALSE, 0);
+
+    g_signal_connect(iconbutton, "button_press_event", G_CALLBACK(btn_press), d);
+    d -> btn = iconbutton;
+    gtk_container_add(GTK_CONTAINER(iconbutton), box);
+
+    if (col == 6) {
+      row++;
+      col = 0;
+      gtk_grid_attach(GTK_GRID(grid), iconbutton, col, row, 1, 1);
+    } else
+      gtk_grid_attach(GTK_GRID(grid), iconbutton, col++, row, 1, 1);
+
+    icondata -> col = col;
+    icondata -> row = row;
+    d -> col = col;
+    d -> row = row;
+    gtk_widget_destroy(d -> window);
+    gtk_widget_show_all(grid);
+  } else {
+    GtkWidget *label = gtk_label_new("A file/folder with that name already exists.");
     gtk_label_set_xalign(GTK_LABEL(label), 0.0);
     gtk_box_pack_start(GTK_BOX(d -> box2), label, FALSE, FALSE, 0);
     gtk_widget_show_all(d -> box2);
@@ -306,8 +370,30 @@ void create_new_file(GtkWidget *menuitem, gpointer userdata) {
   gtk_widget_show_all(window);
 }
 
-void create_new_folder(GtkWidget *newFolder, gpointer userdata) { // Broken
-  return;
+void create_new_folder(GtkWidget *newFolder, gpointer userdata) {
+  struct data *d = (struct data *)userdata;
+  GtkWidget *entry = gtk_entry_new();
+  gtk_entry_set_max_length(GTK_ENTRY(entry), MAX_FILE_LEN);
+
+  GtkWidget *label = gtk_label_new(NULL);
+  const char *format = "<b>Folder name</b>";
+  gtk_label_set_xalign(GTK_LABEL(label), 0.0);
+  gtk_label_set_markup(GTK_LABEL(label), format);
+
+  GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+  gtk_container_set_border_width(GTK_CONTAINER(box), 10);
+  gtk_box_pack_start(GTK_BOX(box), label, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(box), entry, FALSE, FALSE, 0);
+
+  GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
+  gtk_window_set_default_size(GTK_WINDOW(window), 350, 100);
+  gtk_container_add(GTK_CONTAINER(window), box);
+  d -> box2 = box;
+  d -> window = window;
+
+  g_signal_connect(entry, "activate", G_CALLBACK(createfolder_callback), userdata);
+  gtk_widget_show_all(window);
 }
 
 void about_box(GtkWidget *about, gpointer userdata) {
@@ -467,7 +553,7 @@ static void activate(GtkApplication *app, gpointer data) {
   icon_location.col = col;
   icon_location.row = row;
   g_signal_connect(newfile, "activate", G_CALLBACK(create_new_file), &icon_location);
-  // g_signal_connect(newfile, "activate", G_CALLBACK(create_new_folder), icon_location);
+  g_signal_connect(newfolder, "activate", G_CALLBACK(create_new_folder), &icon_location);
 
   gtk_widget_show_all(window);
 }
