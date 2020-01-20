@@ -6,7 +6,7 @@
 
 //Looking for the properties of a file? Check out fileinfo.c.
 
-int new_file(char *name) {
+int new_file(const char *name) {
   int fd = open(name, O_CREAT | O_EXCL, 0666);
   printf("fd: %d \n", fd);
 

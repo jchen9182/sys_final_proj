@@ -1,4 +1,4 @@
-void new_file();
+int new_file(const char *name);
 
 void new_folder();
 

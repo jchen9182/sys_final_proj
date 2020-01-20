@@ -17,12 +17,14 @@ struct data {
   GtkWidget *label;
   GtkWidget *popover;
   int called_from_popover;
+  GtkWidget *menuitem;
   GtkWidget *box2;
   struct fileprops metadata;
 };
 
 int num_files;
 char ** files;
+struct data icon_location;
 
 void free_files() {
   int i;
@@ -110,6 +112,7 @@ void renamefile(GtkWidget *menuitem, gpointer userdata) {
   d -> popover = popover;
   d -> called_from_popover = 1;
 
+  g_signal_connect(renamebutton, "activate", G_CALLBACK(entry_callback), userdata);
   g_signal_connect(entry, "activate", G_CALLBACK(entry_callback), userdata);
   gtk_widget_show_all(popover);
 }
@@ -212,30 +215,66 @@ void view_props(GtkWidget *menuitem, gpointer userdata) {
   gtk_widget_show_all(window);
 }
 
-void create_new_file(GtkWidget *newfile, gpointer userdata) { // Broken
+void createfile_callback(GtkEntry *entry, gpointer userdata) {
   struct data *d = (struct data *)userdata;
   GtkWidget *grid = d -> grid;
   int col = d -> col;
   int row = d -> row;
 
-  GtkWidget *iconbutton = gtk_button_new();
-  gtk_button_set_relief(GTK_BUTTON(iconbutton), GTK_RELIEF_NONE);
-  GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
-  GtkWidget *iconimg = gtk_image_new_from_file("fileicon.png");
-  gtk_box_pack_start(GTK_BOX(box), iconimg, FALSE, FALSE, 0);
+  const gchar *entry_text = gtk_entry_get_text(entry);
+  printf("Entry contents: %s \n", entry_text);
 
-  gtk_container_add(GTK_CONTAINER(iconbutton), box);
-  if (col == 6) {
+  int newfile = new_file(entry_text);
+  if (newfile == 1) {
+    GtkWidget *iconbutton = gtk_button_new();
+    gtk_button_set_relief(GTK_BUTTON(iconbutton), GTK_RELIEF_NONE);
+    GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+    GtkWidget *iconimg = gtk_image_new_from_file("fileicon.png");
+    gtk_box_pack_start(GTK_BOX(box), iconimg, FALSE, FALSE, 0);
+
+    gtk_container_add(GTK_CONTAINER(iconbutton), box);
+
+    if (col == 6) {
       row++;
       col = 0;
       gtk_grid_attach(GTK_GRID(grid), iconbutton, col, row, 1, 1);
-    }
-  else gtk_grid_attach(GTK_GRID(grid), iconbutton, col++, row++, 1, 1);
+    } else
+      gtk_grid_attach(GTK_GRID(grid), iconbutton, col++, row, 1, 1);
 
-  // icon_location -> col = col;
-  // icon_location -> row = row;
+    d -> col = col;
+    d -> row = row;
+    gtk_widget_show_all(grid);
+  } else {
+    GtkWidget *label = gtk_label_new("A file with that name already exists.");
+    gtk_label_set_xalign(GTK_LABEL(label), 0.0);
+    gtk_box_pack_start(GTK_BOX(d -> box2), label, FALSE, FALSE, 0);
+    gtk_widget_show_all(d -> box2);
+  }
+}
 
-  gtk_widget_show_all(grid);
+void create_new_file(GtkWidget *menuitem, gpointer userdata) {
+  struct data *d = (struct data *)userdata;
+  GtkWidget *entry = gtk_entry_new();
+  gtk_entry_set_max_length(GTK_ENTRY(entry), MAX_FILE_LEN);
+
+  GtkWidget *label = gtk_label_new(NULL);
+  const char *format = "<b>File name</b>";
+  gtk_label_set_xalign(GTK_LABEL(label), 0.0);
+  gtk_label_set_markup(GTK_LABEL(label), format);
+
+  GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+  gtk_container_set_border_width(GTK_CONTAINER(box), 10);
+  gtk_box_pack_start(GTK_BOX(box), label, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(box), entry, FALSE, FALSE, 0);
+
+  GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
+  gtk_window_set_default_size(GTK_WINDOW(window), 450, 100);
+  gtk_container_add(GTK_CONTAINER(window), box);
+  d -> box2 = box;
+
+  g_signal_connect(entry, "activate", G_CALLBACK(createfile_callback), userdata);
+  gtk_widget_show_all(window);
 }
 
 void create_new_folder(GtkWidget *newFolder, gpointer userdata) { // Broken
@@ -295,10 +334,6 @@ gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
   }
 
   return FALSE;
-}
-
-void key_press() { // BROKEN
-  return;
 }
 
 static void activate(GtkApplication *app, gpointer data) {
@@ -399,11 +434,10 @@ static void activate(GtkApplication *app, gpointer data) {
     }
   }
 
-  // icon_location -> window = window;
-  // icon_location -> grid = grid;
-  // icon_location -> col = col;
-  // icon_location -> row = row;
-  // g_signal_connect(newfile, "activate", G_CALLBACK(create_new_file), icon_location);
+  icon_location.grid = grid;
+  icon_location.col = col;
+  icon_location.row = row;
+  g_signal_connect(newfile, "activate", G_CALLBACK(create_new_file), &icon_location);
   // g_signal_connect(newfile, "activate", G_CALLBACK(create_new_folder), icon_location);
 
   gtk_widget_show_all(window);
