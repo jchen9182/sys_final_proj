@@ -29,6 +29,9 @@ make
 make run
 ```
 
+**How to use this program**
+
+
 **Known bugs**
 - [POSSIBLE] Earlier in the project, there was a memory corruption bug that led to undefined behavior.
   - Was due to incorrect malloc-ing technique for the getfiles() function, which generates a 2D array of file names. Possibly fixed.
@@ -39,3 +42,5 @@ make run
 - Changing directories by entering/exiting folders
   - Would require a massive rewrite of the code, and I don't think I have the GTK knowledge to completely redraw the screen from outside the activate() function.
   - Not sure how to deal with the scope of GtkWidgets outside the function they were declared in (activate)
+- The grid system is static. It will not adjust to you deleting files or creating  files and whatnot (never considered as a feature in the first place, but it is a basic feature of File Explorer, Finder, Nautilus, etc.)
+- Keyboard shortcuts? <-- what do you guys think
