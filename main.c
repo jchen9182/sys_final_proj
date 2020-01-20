@@ -11,7 +11,7 @@
 
 struct data {
   char filename[50];
-  int isDir;
+  int isDir, col, row;
   GtkApplication *app;
   GtkWidget *window;
   GtkWidget *grid;
@@ -25,6 +25,8 @@ struct data {
 
 int num_files;
 char ** files;
+
+struct data * icon_location;
 
 void free_files() {
   int i;
@@ -213,21 +215,35 @@ void view_props(GtkWidget *menuitem, gpointer userdata) {
   gtk_widget_show_all(window);
 }
 
-void create_new_file(GtkWidget *newfile, gpointer userdata) { /// BROKEN
+void create_new_file(GtkWidget *newfile, gpointer userdata) { // Broken
   struct data *d = (struct data *)userdata;
   GtkWidget *window = d -> window;
   GtkWidget *grid = d -> grid;
+  int col = d -> col;
+  int row = d -> row;
 
   GtkWidget *iconbutton = gtk_button_new();
-  gtk_button_set_relief(GTK_BUTTON(iconbutton), GTK_RELIEF_NONE); //gets rid of borders
+  gtk_button_set_relief(GTK_BUTTON(iconbutton), GTK_RELIEF_NONE);
   GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
   GtkWidget *iconimg = gtk_image_new_from_file("fileicon.png");
   gtk_box_pack_start(GTK_BOX(box), iconimg, FALSE, FALSE, 0);
 
-  // gtk_container_add(GTK_CONTAINER(iconbutton), box);
-  // gtk_grid_attach(GTK_GRID(grid), iconbutton, 5, 3, 1, 1);
+  gtk_container_add(GTK_CONTAINER(iconbutton), box);
+  if (col == 6) {
+      row++;
+      col = 0;
+      gtk_grid_attach(GTK_GRID(grid), iconbutton, col, row, 1, 1);
+    }
+  else gtk_grid_attach(GTK_GRID(grid), iconbutton, col++, row++, 1, 1);
+  
+  // icon_location -> col = col;
+  // icon_location -> row = row;
   
   gtk_widget_show_all(window);
+}
+
+void create_new_folder(GtkWidget *newFolder, gpointer userdata) { // Broken
+  return;
 }
 
 void about_box(GtkWidget *about, gpointer userdata) {
@@ -288,6 +304,10 @@ gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
   return FALSE;
 }
 
+void key_press() { // BROKEN
+  return;
+}
+
 static void activate(GtkApplication *app, gpointer data) {
   GtkWidget *window = gtk_application_window_new(app);
   gtk_window_set_default_size(GTK_WINDOW(window), 900, 500);
@@ -335,10 +355,7 @@ static void activate(GtkApplication *app, gpointer data) {
   gtk_container_set_border_width(GTK_CONTAINER(grid), 20);
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(grid));
 
-  struct data * w = malloc(sizeof(struct data));
-  w -> window = window;
-  w -> grid = grid;
-  g_signal_connect(newfile, "activate", G_CALLBACK(create_new_file), w);
+  //g_signal_connect(GTK_WINDOW(window), "key_press_event", G_CALLBACK(key_press), NULL);
 
   int i;
   int row, col = 0;
@@ -391,6 +408,13 @@ static void activate(GtkApplication *app, gpointer data) {
       col = 0;
     }
   }
+
+  // icon_location -> window = window;
+  // icon_location -> grid = grid;
+  // icon_location -> col = col;
+  // icon_location -> row = row;
+  // g_signal_connect(newfile, "activate", G_CALLBACK(create_new_file), icon_location);
+  // g_signal_connect(newfile, "activate", G_CALLBACK(create_new_folder), icon_location);
 
   gtk_widget_show_all(window);
 }
