@@ -235,10 +235,10 @@ void create_new_file(GtkWidget *newfile, gpointer userdata) { // Broken
       gtk_grid_attach(GTK_GRID(grid), iconbutton, col, row, 1, 1);
     }
   else gtk_grid_attach(GTK_GRID(grid), iconbutton, col++, row++, 1, 1);
-  
+
   // icon_location -> col = col;
   // icon_location -> row = row;
-  
+
   gtk_widget_show_all(window);
 }
 

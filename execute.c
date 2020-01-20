@@ -34,24 +34,3 @@ void run_file(char *file) { //for double clicking a file; this function doesn't 
   else
     printf("Unrecognized file extension. \n");
 }
-
-void back() { //not sure if we are doing forward
-  if (chdir("..") < 0) {
-    printf("chdir() error: %s\n",strerror(errno));
-  }
-}
-
-void enter_directory(char *directory) {
-  if (chdir(directory) < 0) {
-    printf("chdir() error: %s\n",strerror(errno));
-  }
-}
-
-void double_click(char *file_name) { //works for files and directories
-  struct fileprops prop;
-  get_props(file_name, &prop);
-  if (prop.isdir == 0)
-    run_file(file_name);
-  else
-    enter_directory(file_name);
-}
