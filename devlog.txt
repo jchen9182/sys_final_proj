@@ -65,7 +65,7 @@
   - This probably meant that the memory the strings initially took up wasn't protected and was "taken over" by an abundance of GTK widgets.
   - Won't know if this issue is 100% fixed until I can test this on the school computers.
 
-[2019-01-18] Kevin Li
+[2020-01-18] Kevin Li
 - Get rid of button/file borders
 - Use Nautilus file and folder icons rather than generic icons
 - Line wrap is broken. Using ellipsize instead to at least have some protection against super long file names.
@@ -81,3 +81,8 @@
   - Show parent directory (this repo, since we're not moving anywhere)
   - Show permissions (in rwxrwxrwx form)
 - Groundwork for creating new files/folders
+
+[2020-01-19] Kevin Li
+- Check before renaming a file so it doesn't get overwritten
+- Create file
+- Create folder

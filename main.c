@@ -263,6 +263,7 @@ void createfile_callback(GtkEntry *entry, gpointer userdata) {
       row++;
       col = 0;
       gtk_grid_attach(GTK_GRID(grid), iconbutton, col, row, 1, 1);
+      col++;
     } else
       gtk_grid_attach(GTK_GRID(grid), iconbutton, col++, row, 1, 1);
 
@@ -327,6 +328,7 @@ void createfolder_callback(GtkEntry *entry, gpointer userdata) {
       row++;
       col = 0;
       gtk_grid_attach(GTK_GRID(grid), iconbutton, col, row, 1, 1);
+      col++;
     } else
       gtk_grid_attach(GTK_GRID(grid), iconbutton, col++, row, 1, 1);
 
