@@ -17,14 +17,16 @@ struct data {
   GtkWidget *label;
   GtkWidget *popover;
   int called_from_popover;
-  GtkWidget *menuitem;
   GtkWidget *box2;
+  GtkWidget *window;
   struct fileprops metadata;
 };
 
 int num_files;
 char ** files;
 struct data icon_location;
+
+gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata);
 
 void free_files() {
   int i;
@@ -216,7 +218,14 @@ void view_props(GtkWidget *menuitem, gpointer userdata) {
 }
 
 void createfile_callback(GtkEntry *entry, gpointer userdata) {
-  struct data *d = (struct data *)userdata;
+  struct data *d = malloc(sizeof(struct data));
+  struct data *icondata = (struct data *)userdata;
+  d -> grid = icondata -> grid;
+  d -> col = icondata -> col;
+  d -> row = icondata -> row;
+  d -> box2 = icondata -> box2;
+  d -> window = icondata -> window;
+
   GtkWidget *grid = d -> grid;
   int col = d -> col;
   int row = d -> row;
@@ -226,12 +235,28 @@ void createfile_callback(GtkEntry *entry, gpointer userdata) {
 
   int newfile = new_file(entry_text);
   if (newfile == 1) {
+    d -> isDir = 0;
+    strncpy(d -> filename, entry_text, MAX_FILE_LEN);
+    struct fileprops metadata;
+    get_props(entry_text, &metadata);
+    d -> metadata = metadata;
+
     GtkWidget *iconbutton = gtk_button_new();
     gtk_button_set_relief(GTK_BUTTON(iconbutton), GTK_RELIEF_NONE);
     GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
     GtkWidget *iconimg = gtk_image_new_from_file("fileicon.png");
-    gtk_box_pack_start(GTK_BOX(box), iconimg, FALSE, FALSE, 0);
 
+    GtkWidget *filename = gtk_label_new(entry_text);
+    gtk_label_set_justify(GTK_LABEL(filename), GTK_JUSTIFY_CENTER);
+    gtk_label_set_max_width_chars(GTK_LABEL(filename), 1);
+    gtk_label_set_ellipsize(GTK_LABEL(filename), PANGO_ELLIPSIZE_END);
+    d -> label = filename;
+
+    gtk_box_pack_start(GTK_BOX(box), iconimg, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(box), filename, FALSE, FALSE, 0);
+
+    g_signal_connect(iconbutton, "button_press_event", G_CALLBACK(btn_press), d);
+    d -> btn = iconbutton;
     gtk_container_add(GTK_CONTAINER(iconbutton), box);
 
     if (col == 6) {
@@ -241,8 +266,11 @@ void createfile_callback(GtkEntry *entry, gpointer userdata) {
     } else
       gtk_grid_attach(GTK_GRID(grid), iconbutton, col++, row, 1, 1);
 
+    icondata -> col = col;
+    icondata -> row = row;
     d -> col = col;
     d -> row = row;
+    gtk_widget_destroy(d -> window);
     gtk_widget_show_all(grid);
   } else {
     GtkWidget *label = gtk_label_new("A file with that name already exists.");
@@ -269,9 +297,10 @@ void create_new_file(GtkWidget *menuitem, gpointer userdata) {
 
   GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
-  gtk_window_set_default_size(GTK_WINDOW(window), 450, 100);
+  gtk_window_set_default_size(GTK_WINDOW(window), 350, 100);
   gtk_container_add(GTK_CONTAINER(window), box);
   d -> box2 = box;
+  d -> window = window;
 
   g_signal_connect(entry, "activate", G_CALLBACK(createfile_callback), userdata);
   gtk_widget_show_all(window);
