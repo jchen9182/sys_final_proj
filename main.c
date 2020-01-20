@@ -454,6 +454,10 @@ gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
   return FALSE;
 }
 
+void back_press(GtkWidget *backbutton, gpointer userdata) {
+  
+}
+
 static void activate(GtkApplication *app, gpointer data) {
   windoww = gtk_application_window_new(app);
   gtk_window_set_default_size(GTK_WINDOW(windoww), 900, 500);
@@ -480,12 +484,15 @@ static void activate(GtkApplication *app, gpointer data) {
   gtk_menu_shell_append(GTK_MENU_SHELL(optionsmenu), about);
 
   g_signal_connect(about, "activate", G_CALLBACK(about_box), NULL);
-
   gtk_widget_show_all(optionsmenu);
 
   GtkWidget *menubutton = gtk_menu_button_new();
   gtk_menu_button_set_popup(GTK_MENU_BUTTON(menubutton), optionsmenu);
   gtk_menu_button_set_direction(GTK_MENU_BUTTON(menubutton), GTK_ARROW_DOWN);
+
+  GtkWidget *backbutton = gtk_button_new_with_label("<");
+  gtk_header_bar_pack_start(GTK_HEADER_BAR(titlebar), backbutton);
+  g_signal_connect(backbutton, "button_press_event", G_CALLBACK(back_press), NULL);
 
   gtk_header_bar_pack_start(GTK_HEADER_BAR(titlebar), cwdlabel);
   gtk_header_bar_pack_end(GTK_HEADER_BAR(titlebar), menubutton);
