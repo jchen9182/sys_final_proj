@@ -54,3 +54,4 @@ make run
   - Not sure how to deal with the scope of GtkWidgets outside the function they were declared in (activate)
 - The grid system is static. It will not adjust to you deleting files or creating  files and whatnot (never considered as a feature in the first place, but it is a basic feature of File Explorer, Finder, Nautilus, etc.)
 - Keyboard shortcuts. We decided to try to implement this feature last but didn't realize there needed to be an install for GDK. It was too late to ask for it to be installed on the school computers.
+- Clicking and dragging to select multiple files at once would have required much of our code to be rewritten. We don't have hte necessary code that tracks and moves the position of files.
