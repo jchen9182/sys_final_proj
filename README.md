@@ -53,4 +53,4 @@ make run
   - Would require a massive rewrite of the code, and I don't think I have the GTK knowledge to completely redraw the screen from outside the activate() function.
   - Not sure how to deal with the scope of GtkWidgets outside the function they were declared in (activate)
 - The grid system is static. It will not adjust to you deleting files or creating  files and whatnot (never considered as a feature in the first place, but it is a basic feature of File Explorer, Finder, Nautilus, etc.)
-- Keyboard shortcuts? <-- what do you guys think
+- Keyboard shortcuts. We decided to try to implement this feature last but didn't realize there needed to be an install for GDK. It was too late to ask for it to be installed on the school computers.
