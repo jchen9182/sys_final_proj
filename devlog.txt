@@ -56,7 +56,8 @@
 - Double click a file to open a file
 
 [2020-01-17] Samuel Fang
-- Fixed README.md
+- Fixed README.md formatting
+- Worked on double click
 
 [2020-01-17] Kevin Li
 - I seriously hope this fixed the memory corruption issue.
@@ -91,3 +92,11 @@
 - Check before renaming a file so it doesn't get overwritten
 - Create file
 - Create folder
+
+[2020-01-20] Samuel Fang
+- Double clicking folders now work
+  - Still bug where folder/file icons do not show up in other directories
+- Got back button to work, other than at /home
+
+[2020-01-20] Justin Chen
+- Added back button

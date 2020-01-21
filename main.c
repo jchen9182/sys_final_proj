@@ -9,6 +9,10 @@
 
 #define MAX_FILE_LEN 50
 
+GtkApplication *app;
+GtkWidget *windoww; //so you can close window outside activate function
+int is_cd = 0;
+
 struct data {
   char filename[50];
   int isDir, col, row;
@@ -42,8 +46,12 @@ void executefile(GtkWidget *menuitem, gpointer userdata) {
 
   if (d -> isDir == 0)
     run_file(d -> filename);
-  else
-    printf("Sorry, changing directories would require a massive rewrite of this program. \n");
+  else {
+    is_cd = 1;
+    chdir(d -> filename);
+    gtk_window_close(GTK_WINDOW(windoww));
+    g_application_quit(G_APPLICATION(app)); 
+  }
 }
 
 void deletefile(GtkWidget *menuitem, gpointer userdata) {
@@ -440,19 +448,33 @@ gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
     struct data *d = (struct data *)userdata;
     if (d -> isDir == 0)
       run_file(d -> filename);
-    else
-      printf("Sorry, changing directories would require a massive rewrite of this program. \n");
-
+    else {
+      is_cd = 1;
+      chdir(d -> filename);
+      gtk_window_close(GTK_WINDOW(windoww));
+      g_application_quit(G_APPLICATION(app)); 
+}
     return TRUE;
   }
 
   return FALSE;
 }
 
+void back_press(GtkWidget *backbutton, gpointer userdata) {
+  char cwd[100];
+  getcwd(cwd, 100);
+  if (strcmp("/home", cwd)){
+    is_cd = 1;
+    chdir("..");
+    gtk_window_close(GTK_WINDOW(windoww));
+    g_application_quit(G_APPLICATION(app)); 
+  }
+}
+
 static void activate(GtkApplication *app, gpointer data) {
-  GtkWidget *window = gtk_application_window_new(app);
-  gtk_window_set_default_size(GTK_WINDOW(window), 900, 500);
-  gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
+  windoww = gtk_application_window_new(app);
+  gtk_window_set_default_size(GTK_WINDOW(windoww), 900, 500);
+  gtk_window_set_resizable(GTK_WINDOW(windoww), FALSE);
 
   GtkWidget *titlebar;
   GtkWidget *grid;
@@ -475,23 +497,26 @@ static void activate(GtkApplication *app, gpointer data) {
   gtk_menu_shell_append(GTK_MENU_SHELL(optionsmenu), about);
 
   g_signal_connect(about, "activate", G_CALLBACK(about_box), NULL);
-
   gtk_widget_show_all(optionsmenu);
 
   GtkWidget *menubutton = gtk_menu_button_new();
   gtk_menu_button_set_popup(GTK_MENU_BUTTON(menubutton), optionsmenu);
   gtk_menu_button_set_direction(GTK_MENU_BUTTON(menubutton), GTK_ARROW_DOWN);
 
+  GtkWidget *backbutton = gtk_button_new_with_label("<");
+  gtk_header_bar_pack_start(GTK_HEADER_BAR(titlebar), backbutton);
+  g_signal_connect(backbutton, "button_press_event", G_CALLBACK(back_press), NULL);
+
   gtk_header_bar_pack_start(GTK_HEADER_BAR(titlebar), cwdlabel);
   gtk_header_bar_pack_end(GTK_HEADER_BAR(titlebar), menubutton);
-  gtk_window_set_titlebar(GTK_WINDOW(window), titlebar);
+  gtk_window_set_titlebar(GTK_WINDOW(windoww), titlebar);
 
   grid = gtk_grid_new();
   gtk_grid_set_row_spacing(GTK_GRID(grid), 5);
   gtk_grid_set_column_spacing(GTK_GRID(grid), 50);
   gtk_grid_set_column_homogeneous(GTK_GRID(grid), TRUE);
   gtk_container_set_border_width(GTK_CONTAINER(grid), 20);
-  gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(grid));
+  gtk_container_add(GTK_CONTAINER(windoww), GTK_WIDGET(grid));
 
   //g_signal_connect(GTK_WINDOW(window), "key_press_event", G_CALLBACK(key_press), NULL);
 
@@ -553,22 +578,24 @@ static void activate(GtkApplication *app, gpointer data) {
   g_signal_connect(newfile, "activate", G_CALLBACK(create_new_file), &icon_location);
   g_signal_connect(newfolder, "activate", G_CALLBACK(create_new_folder), &icon_location);
 
-  gtk_widget_show_all(window);
+  gtk_widget_show_all(windoww);
 }
 
 int main(int argc, char *argv[]) {
-  GtkApplication *app = gtk_application_new(
-    "org.mks65.fileexp",
-    G_APPLICATION_FLAGS_NONE
-  );
-
-  num_files = 0;
-  files = getfiles(&num_files);
-
-  g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
-  int status = g_application_run(G_APPLICATION(app), argc, argv);
-  free_files();
-  g_object_unref(app);
-
+  int status;
+  while(0 < 1) {
+    is_cd = 0;
+    app = gtk_application_new(
+      "org.mks65.fileexp",
+      G_APPLICATION_FLAGS_NONE
+    );
+    num_files = 0;
+    files = getfiles(&num_files);
+    g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
+    int status = g_application_run(G_APPLICATION(app), argc, argv);
+    free_files();
+    g_object_unref(app);
+    if(is_cd == 0) break; //x button breaks loop
+  }
   return status;
 }
