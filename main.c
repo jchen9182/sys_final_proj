@@ -11,6 +11,7 @@
 
 GtkApplication *app;
 GtkWidget *windoww; //global window
+int is_cd = 0;
 
 struct data {
   char filename[50];
@@ -444,6 +445,7 @@ gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
     if (d -> isDir == 0)
       run_file(d -> filename);
     else{
+      is_cd = 1;
       chdir(d -> filename);
       gtk_window_close(GTK_WINDOW(windoww));
       g_application_quit(G_APPLICATION(app)); 
@@ -455,7 +457,14 @@ gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
 }
 
 void back_press(GtkWidget *backbutton, gpointer userdata) {
-  
+  char cwd[100];
+  getcwd(cwd, 100);
+  if (strcmp("/home", cwd)){
+  is_cd = 1;
+  chdir("..");
+  gtk_window_close(GTK_WINDOW(windoww));
+  g_application_quit(G_APPLICATION(app)); 
+}
 }
 
 static void activate(GtkApplication *app, gpointer data) {
@@ -569,19 +578,20 @@ static void activate(GtkApplication *app, gpointer data) {
 }
 
 int main(int argc, char *argv[]) {
-  int i;
   int status;
-  for (i = 0; i < 3; i++) {//not infinite for now, should be
-  app = gtk_application_new(
-    "org.mks65.fileexp",
-    G_APPLICATION_FLAGS_NONE
-  );
-  num_files = 0;
-  files = getfiles(&num_files);
-  g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
-  int status = g_application_run(G_APPLICATION(app), argc, argv);
-  free_files();
-  g_object_unref(app);
-}
+  while(0 < 1) {
+    is_cd = 0;
+    app = gtk_application_new(
+      "org.mks65.fileexp",
+      G_APPLICATION_FLAGS_NONE
+    );
+    num_files = 0;
+    files = getfiles(&num_files);
+    g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
+    int status = g_application_run(G_APPLICATION(app), argc, argv);
+    free_files();
+    g_object_unref(app);
+    if(is_cd == 0) break; //x button breaks loop
+  }
   return status;
 }
