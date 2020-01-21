@@ -10,7 +10,7 @@
 #define MAX_FILE_LEN 50
 
 GtkApplication *app;
-GtkWidget *windoww; //global window
+GtkWidget *windoww; //so you can close window outside activate function
 int is_cd = 0;
 
 struct data {
