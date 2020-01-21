@@ -33,7 +33,7 @@ make run
   - Properties, where you may view:
     - The name of the file (can rename it from inside this window as well)
     - Size (both in bytes and converted to units like KB, MB, GB when appropriate)
-    - Parent folder (this repo, since this program doesn't support changing folders)
+    - Parent folder
     - Permissions in rwxrwxrwx form
     - The properties window is reduced for folders. For example, there is no point in displaying the size of a folder.
 - Double click a file/folder to open it as well
