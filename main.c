@@ -46,8 +46,12 @@ void executefile(GtkWidget *menuitem, gpointer userdata) {
 
   if (d -> isDir == 0)
     run_file(d -> filename);
-  else
-    g_application_quit(NULL);
+  else {
+    is_cd = 1;
+    chdir(d -> filename);
+    gtk_window_close(GTK_WINDOW(windoww));
+    g_application_quit(G_APPLICATION(app)); 
+  }
 }
 
 void deletefile(GtkWidget *menuitem, gpointer userdata) {
@@ -444,7 +448,7 @@ gboolean btn_press(GtkWidget *btn, GdkEventButton *event, gpointer userdata) {
     struct data *d = (struct data *)userdata;
     if (d -> isDir == 0)
       run_file(d -> filename);
-    else{
+    else {
       is_cd = 1;
       chdir(d -> filename);
       gtk_window_close(GTK_WINDOW(windoww));
@@ -460,11 +464,11 @@ void back_press(GtkWidget *backbutton, gpointer userdata) {
   char cwd[100];
   getcwd(cwd, 100);
   if (strcmp("/home", cwd)){
-  is_cd = 1;
-  chdir("..");
-  gtk_window_close(GTK_WINDOW(windoww));
-  g_application_quit(G_APPLICATION(app)); 
-}
+    is_cd = 1;
+    chdir("..");
+    gtk_window_close(GTK_WINDOW(windoww));
+    g_application_quit(G_APPLICATION(app)); 
+  }
 }
 
 static void activate(GtkApplication *app, gpointer data) {
