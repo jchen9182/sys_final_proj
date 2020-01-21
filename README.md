@@ -36,7 +36,8 @@ make run
     - Parent folder (this repo, since this program doesn't support changing folders)
     - Permissions in rwxrwxrwx form
     - The properties window is reduced for folders. For example, there is no point in displaying the size of a folder.
-- Double click a file to open it as well
+- Double click a file/folder to open it as well
+  - A back button in the top left to go to the parent directory
 - The arrow in the top right of the window:
   - New File/Folder (same implementation)
     - Like rename, will not allow you to create a file/folder that already exists
@@ -47,11 +48,10 @@ make run
   - Was due to incorrect malloc-ing technique for the getfiles() function, which generates a 2D array of file names. Possibly fixed.
   - Because this is a GUI program, the program cannot be tested on the school computers easily to verify this conclusion. However, from the few times I've tested via x11, it appears to have been fixed.
   - If it hasn't, we implore Mr. DW to run the program a couple times until the undefined behavior stops.
+- File/folder icons are broken outside the repo folder. This is because the program does not have access to the icon files outside the repo. 
+  - chdir() would fix this specific issue but cause a million other issues, so we decided this was the better of two evils. 
 
 **Abandoned features**
-- Changing directories by entering/exiting folders
-  - Would require a massive rewrite of the code, and I don't think I have the GTK knowledge to completely redraw the screen from outside the activate() function.
-  - Not sure how to deal with the scope of GtkWidgets outside the function they were declared in (activate)
 - The grid system is static. It will not adjust to you deleting files or creating  files and whatnot (never considered as a feature in the first place, but it is a basic feature of File Explorer, Finder, Nautilus, etc.)
 - Keyboard shortcuts. We decided to try to implement this feature last but didn't realize there needed to be an install for GDK. It was too late to ask for it to be installed on the school computers.
 - Clicking and dragging to select multiple files at once would have required much of our code to be rewritten. We don't have the necessary code that tracks and moves the position of files.
